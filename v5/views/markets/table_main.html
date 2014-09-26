@@ -1,0 +1,15 @@
+<div class="data-table" ng-show="table_main.th">
+  <table class="block-table">
+  <caption>{{tablename(table_main.tableName,match.sportKind)}}</caption>
+    <thead>
+      <tr>
+        <th ng-repeat="th in table_main.th">{{th.forecast}}</th>
+      </tr>
+   </thead>
+   <tbody>
+      <tr>
+        <td ng-repeat="th in table_main.th" class="{{th.index.dir}}">{{th.index.value}}</td>
+      </tr>
+   </tbody>  
+  </table>
+</div>

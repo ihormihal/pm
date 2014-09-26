@@ -1,0 +1,11 @@
+<div class="data-table" ng-show="table_goal.th">
+  <table class="block-table left-align">
+    <caption>{{translate(table_goal.tableName)}}</caption>
+    <tbody>
+      <tr ng-repeat="th in table_goal.th">
+        <td class="green-text">{{translate(th.field)}}</td>
+        <td class="{{th.index.dir}}">{{th.index.value}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
