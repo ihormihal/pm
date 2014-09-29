@@ -200,496 +200,216 @@ dataConvert = function (data,dataOld){
 
       //allMatches[data[i]['id']].allMarkets[market_name] = data[i].markets[j];
 
-      if(market_name.indexOf('bcg_Odds') !== -1){
-        //По форе
+      if(market_name == 'bcg_Odds'){
+        //Фора основная
+        match.table_data.bc_f1 = getValueOdd(i,j,1);
+        match.table_data.bc_fk1 = getValue(i,j,0);
+        match.table_data.bc_f2 = getValueOdd(i,j,3);
+        match.table_data.bc_fk2 = getValue(i,j,2);
       }
+
+      else if(market_name.indexOf('bcg_Odds_') !== -1){
+        //Форы дополнительные
+        match.table_odds.th.push({f1 : getValueOdd(i,j,1), fk1 : getValue(i,j,0), f2 : getValueOdd(i,j,3), fk2 : getValue(i,j,2)});
+      }
+
       else if(market_name.indexOf('bcg_Basic') !== -1){
         //Основной
+        for (var k in data[i].markets[j].p) {
+          switch (data[i].markets[j].p[k].c) {
+            case 'bc_1':
+              match.table_data.bc_1 = getValue(i,j,k);
+              break;
+            case 'bc_X':
+              match.table_data.bc_X = getValue(i,j,k);
+              break;
+            case 'bc_2':
+              match.table_data.bc_2 = getValue(i,j,k);
+              break;
+            default:
+              console.log('undefined title: ' + market_name);
+          }
+        }
       }
+
       else if(market_name.indexOf('bcg_Double') !== -1){
         //Двойной шанс
+        for (var k in data[i].markets[j].p) {
+          switch (data[i].markets[j].p[k].c) {
+            case 'bc_1X':
+              match.table_data.bc_1X = getValue(i,j,k);
+              break;
+            case 'bc_12':
+              match.table_data.bc_12 = getValue(i,j,k);
+              break;
+            case 'bc_X2':
+              match.table_data.bc_X2 = getValue(i,j,k);
+              break;
+            default:
+              console.log('undefined title: ' + market_name);
+          }
+        }
       }
-      else if(market_name.indexOf('bcg_Total') !== -1){
-        //Все тоталлы
+
+      else if(market_name == 'bcg_Total'){
+        match.table_data.bc_T_V = getValue(i,j,1);
+        match.table_data.bc_T_G = getValue(i,j,2);
+        match.table_data.bc_T_L = getValue(i,j,0);
       }
+
+      else if(market_name.indexOf('bcg_Total_') !== -1){
+        //Тоталлы дополнительные
+        match.table_total.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
+      }
+
       else if(market_name.indexOf('bcg_Pass') !== -1){
         //Проход
       }
+
       else if(market_name.indexOf('bcg_Team1_Total') !== -1){
         //Все тоталлы 1К
+        match.table_total_team1.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
       }
+
       else if(market_name.indexOf('bcg_Team2_Total') !== -1){
         //Все тоталлы 2К
+        match.table_total_team2.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
       }
+
       else if(market_name.indexOf('bcg_Team12_Goal') !== -1){
         //Забют обе?
+        match.table_goal.tableName = data[i].markets[j].c;
+        for (var k in data[i].markets[j].p) {
+          match.table_goal.th.push({field : data[i].markets[j].p[k].c, index : getValue(i,j,k)});
+        }
       }
+
       else if(market_name.indexOf('bcg_HalfFullTime') !== -1){
         //Тайм/Матч
       }
+
       else if(market_name.indexOf('bcg_SeriesScore') !== -1){
         //Счет серии
         var period = parseInt(market_name.match(/\d+/)[0]);
       }
+
       else if(market_name.indexOf('сета №') !== -1){
         //Счет сета
         var period = parseInt(market_name.match(/\d+/)[0]);
       }
+
       else if(market_name.indexOf('bcg_Period') !== -1){
         var period = parseInt(market_name.match(/\d+/)[0]);
-        if(market_name.indexOf('_O') !== -1){
-          //форы
+        if(market_name.indexOf('_B') !== -1){
+          var tab = 'table_data_time'+period;
+          for (var k in data[i].markets[j].p) {
+          switch (data[i].markets[j].p[k].c) {
+            case 'bc_P1_1':
+              match[tab].bc_1 = getValue(i,j,k);
+              break;
+            case 'bc_P1_X':
+              match[tab].bc_X = getValue(i,j,k);
+              break;
+            case 'bc_P1_2':
+              match[tab].bc_2 = getValue(i,j,k);
+              break;
+            default:
+              console.log('undefined title: ' + market_name);
+          }
         }
+
+        else if(market_name.indexOf('_O') !== -1){
+          //форы
+          var tab = 'table_data_time'+period;
+          match[tab].bc_f1 = getValueOdd(i,j,1);
+          match[tab].bc_fk1 = getValue(i,j,0);
+          match[tab].bc_f2 = getValueOdd(i,j,3);
+          match[tab].bc_fk2 = getValue(i,j,2);
+        }
+
         else if(market_name.indexOf('_T') !== -1){
           //тоталлы
+          var tab = 'table_data_time'+period;
+          match[tab].bc_T_V = getValue(i,j,1);
+          match[tab].bc_T_G = getValue(i,j,2);
+          match[tab].bc_T_L = getValue(i,j,0);
         }
+
         else if(market_name.indexOf('_DC') !== -1){
           //двойной выбор
-        }else{
-          //другие
         }
+
+        else{
+          //другие по периодам
+        }
+        match.table_data_time[period-1] = match['table_data_time'+period];
+        //это под вопросом
       }
+
       else if(market_name.indexOf('bcg_P12_T1_Goal_YN') !== -1){
         //Забьет 1-я в каждом тайме
       }
+
       else if(market_name.indexOf('bcg_P12_T2_Goal_YN') !== -1){
         //Забьет 2-я в каждом тайме
       }
+
       else if(market_name.indexOf('bcg_Next_Goal') !== -1){
         //Кто забьет следующий гол 
       }
+
       else if(market_name.indexOf('bcg_NHL') !== -1){
         //С овертаймом и буллитами
       }
+
       else if(market_name.indexOf('bcg_AwayOff') !== -1){
         //Удаление
       }
+      
       else{
         //другие
+        if(market_name_rus.indexOf('Сет') !== -1){
+          var period = parseInt(market_name_rus.match(/\d+/)[0]);
+          match['table_total_time'+period].th.push({rate : getValue(i,j,0), b: getValue(i,j,2), m : getValue(i,j,1)});
+          match.table_total_time[period-1] = match['table_total_time'+period];
+        }else{
+          //другие
+          //Все остальные таблицы
+          var tab_name = 'table_' + tables;
+          var arrl = data[i].markets[j].p.length;
+          //Если количество исходов больше 3, то разбиваем в 2 колонки
+          if(arrl > 3){
+            match[tab_name] = new dataTableMulti(data[i].markets[j].н);
+            var rows = Math.ceil(arrl/2);
+            var col1 = "";
+            var col2 = "";
+            for(var r = 0; r < rows; r++){
+              var k1 = r;
+              var k2 = r+rows;
+
+              col1 = {field : data[i].markets[j].p[k1].c, index : getValue(i,j,k1)};
+
+              if(k2 < arrl){
+                col2 = {field : data[i].markets[j].p[k2].c, index : getValue(i,j,k2)};
+              }else{
+                col2 = {field : "-", index : {value : "-", dir : "none"}};
+              }
+
+              row = {col1 : col1, col2 : col2};
+              match[tab_name].Rows.push(row);
+            }
+            match.multiTables.push(match[tab_name]);
+
+          }else{
+            match[tab_name] = new dataTable(data[i].markets[j].н);
+            for (var k in data[i].markets[j].p) {
+              match[tab_name].th.push({field : data[i].markets[j].p[k].c, index : getValue(i,j,k)});
+            } 
+            match.tables.push(match[tab_name]);
+          }
+          tables+=1;
+        }
       }
-
-      
-
-
-
-
-      
-      var market_short = market_name.substring(0, market_name.length - 1); //Отрезаем один символ в конце
-      //var market_short_ = market_name.substring(0, market_name.length - 2); //Отрезаем два символа в конце
-
-      switch (market_short) {
-      
-        case 'bcg_Basi': //Основной parseFloat(getValue(i,j,0));
-          for (var k in data[i].markets[j].p) {
-            switch (data[i].markets[j].p[k].c) {
-              case 'bc_1':
-                match.table_data.bc_1 = getValue(i,j,k);
-                break;
-              case 'bc_X':
-                match.table_data.bc_X = getValue(i,j,k);
-                break;
-              case 'bc_2':
-                match.table_data.bc_2 = getValue(i,j,k);
-                break;
-              default:
-              //console.log('undefined table: ' + market_name);
-            }
-          }
-          break;
-
-        case 'bcg_Doubl': //Двойнош шанс
-          for (var k in data[i].markets[j].p) {
-            switch (data[i].markets[j].p[k].c) {
-              case 'bc_1X':
-                match.table_data.bc_1X = getValue(i,j,k);
-                break;
-              case 'bc_12':
-                match.table_data.bc_12 = getValue(i,j,k);
-                break;
-              case 'bc_X2':
-                match.table_data.bc_X2 = getValue(i,j,k);
-                break;
-              default:
-              //console.log('undefined table: ' + market_name);
-            }
-          }
-          break;
-
-        case 'bcg_Tota': //Тотал основной
-          //match.table_total.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
-          match.table_data.bc_T_V = getValue(i,j,1);
-          match.table_data.bc_T_G = getValue(i,j,2);
-          match.table_data.bc_T_L = getValue(i,j,0);
-          break;
-
-        case 'bcg_Total_': //Тоталы дополнительные
-          match.table_total.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
-          break;
-
-        case 'bcg_Team1_Tota': //Тотал первой комманды
-          match.table_total_team1.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
-          break;
-
-        case 'bcg_Team1_Total': //Собираем дополнительные
-          match.table_total_team1.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
-          break;
-
-        case 'bcg_Team2_Tota': //Тотал второй комманды
-          match.table_total_team2.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
-          break;
-
-        case 'bcg_Team2_Total': //Собираем дополнительные
-          match.table_total_team2.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
-          break;
-
-        case 'bcg_Odd': //Фора основная
-          //match.table_odds.th.push({f1 : getValueOdd(i,j,1), fk1 : getValue(i,j,0), f2 : getValueOdd(i,j,3), fk2 : getValue(i,j,2)});
-          match.table_data.bc_f1 = getValueOdd(i,j,1);
-          match.table_data.bc_fk1 = getValue(i,j,0);
-          match.table_data.bc_f2 = getValueOdd(i,j,3);
-          match.table_data.bc_fk2 = getValue(i,j,2);
-          break;
-
-        case 'bcg_Odds_': //Форы дополнительные
-          match.table_odds.th.push({f1 : getValueOdd(i,j,1), fk1 : getValue(i,j,0), f2 : getValueOdd(i,j,3), fk2 : getValue(i,j,2)});
-          break;
-
-        case 'bcg_Team12_Goa': //Забьют обе?
-          match.table_goal.tableName = data[i].markets[j].c;
-          for (var k in data[i].markets[j].p) {
-            match.table_goal.th.push({field : data[i].markets[j].p[k].c, index : getValue(i,j,k)});
-          }
-          break;
-
-        case 'bcg_Period1_': //Основные по периоду 1
-              switch (market_name) {
-                 
-                case 'bcg_Period1_B': //основной
-                  for (var k in data[i].markets[j].p) {
-                    switch (data[i].markets[j].p[k].c) {
-                      case 'bc_P1_1':
-                        match.table_data_time1.bc_1 = getValue(i,j,k);
-                        break;
-                      case 'bc_P1_X':
-                        match.table_data_time1.bc_X = getValue(i,j,k);
-                        break;
-                      case 'bc_P1_2':
-                        match.table_data_time1.bc_2 = getValue(i,j,k);
-                        break;
-                      default:
-                      //console.log('undefined table: ' + market_name);
-                    }
-                  }
-                  
-                  break;
-
-                case 'bcg_Period1_T': //Тотал
-                  match.table_data_time1.bc_T_V = getValue(i,j,1);
-                  match.table_data_time1.bc_T_G = getValue(i,j,2);
-                  match.table_data_time1.bc_T_L = getValue(i,j,0);
-                  break;
-
-                case 'bcg_Period1_O': //По форе
-                  match.table_data_time1.bc_f1 = getValueOdd(i,j,1);
-                  match.table_data_time1.bc_fk1 = getValue(i,j,0);
-                  match.table_data_time1.bc_f2 = getValueOdd(i,j,3);
-                  match.table_data_time1.bc_fk2 = getValue(i,j,2);
-                  break;
-
-                default:
-                  console.log('undefined table: ' + market_name);
-              }
-
-              match.table_data_time[0] = match.table_data_time1;
-
-              break; //Конец первого периода
-        case 'bcg_Period2_': //Основные по периоду 2
-          switch (market_name) {
-             
-            case 'bcg_Period2_B': //основной
-             for (var k in data[i].markets[j].p) {
-                switch (data[i].markets[j].p[k].c) {
-                  case 'bc_P2_1':
-                    match.table_data_time2.bc_1 = getValue(i,j,k);
-                    break;
-                  case 'bc_P2_X':
-                    match.table_data_time2.bc_X = getValue(i,j,k);
-                    break;
-                  case 'bc_P2_2':
-                    match.table_data_time2.bc_2 = getValue(i,j,k);
-                    break;
-                  default:
-                  //console.log('undefined table: ' + market_name);
-                }
-              }
-              break;
-
-            case 'bcg_Period2_T': //Тотал
-              match.table_data_time2.bc_T_V = getValue(i,j,1);
-              match.table_data_time2.bc_T_G = getValue(i,j,2);
-              match.table_data_time2.bc_T_L = getValue(i,j,0);
-              break;
-
-            case 'bcg_Period2_O': //По форе
-              match.table_data_time2.bc_f1 = getValueOdd(i,j,1);
-              match.table_data_time2.bc_fk1 = getValue(i,j,0);
-              match.table_data_time2.bc_f2 = getValueOdd(i,j,3);
-              match.table_data_time2.bc_fk2 = getValue(i,j,2);
-            default:
-              //console.log('undefined table: ' + market_name);
-          }
-          match.table_data_time[1] = match.table_data_time2;
-          break; //Конец второго периода
-        case 'bcg_Period3_': //Основные по периоду 3
-          switch (market_name) {
-           
-            case 'bcg_Period3_B': //основной
-              for (var k in data[i].markets[j].p) {
-                switch (data[i].markets[j].p[k].c) {
-                  case 'bc_P3_1':
-                    match.table_data_time3.bc_1 = getValue(i,j,k);
-                    break;
-                  case 'bc_P3_X':
-                    match.table_data_time3.bc_X = getValue(i,j,k);
-                    break;
-                  case 'bc_P3_2':
-                    match.table_data_time3.bc_2 = getValue(i,j,k);
-                    break;
-                  default:
-                }
-              }
-              break;
-
-            case 'bcg_Period3_T': //Тотал
-              match.table_data_time3.bc_T_V = getValue(i,j,1);
-              match.table_data_time3.bc_T_G = getValue(i,j,2);
-              match.table_data_time3.bc_T_L = getValue(i,j,0);
-
-              break;
-
-            case 'bcg_Period3_O': //По форе
-              match.table_data_time3.bc_f1 = getValueOdd(i,j,1);
-              match.table_data_time3.bc_fk1 = getValue(i,j,0);
-              match.table_data_time3.bc_f2 = getValueOdd(i,j,3);
-              match.table_data_time3.bc_fk2 = getValue(i,j,2);
-            default:
-              //console.log('undefined table: ' + market_name);
-          }
-          match.table_data_time[2] = match.table_data_time3;
-          break; //Конец третего периода
-        case 'bcg_Period4_': //Основные по периоду 4
-          switch (market_name) {
-             
-            case 'bcg_Period4_B': //основной
-              for (var k in data[i].markets[j].p) {
-                switch (data[i].markets[j].p[k].c) {
-                  case 'bc_P4_1':
-                    match.table_data_time4.bc_1 = getValue(i,j,k);
-                    break;
-                  case 'bc_P4_X':
-                    match.table_data_time4.bc_X = getValue(i,j,k);
-                    break;
-                  case 'bc_P4_2':
-                    match.table_data_time4.bc_2 = getValue(i,j,k);
-                    break;
-                  default:
-                  //console.log('undefined table: ' + market_name);
-                }
-              } 
-              break;
-
-            case 'bcg_Period4_T': //Тотал
-              match.table_data_time4.bc_T_V = getValue(i,j,1);
-              match.table_data_time4.bc_T_G = getValue(i,j,2);
-              match.table_data_time4.bc_T_L = getValue(i,j,0);
-              break;
-
-            case 'bcg_Period4_O': //По форе
-              match.table_data_time4.bc_f1 = getValueOdd(i,j,1);
-              match.table_data_time4.bc_fk1 = getValue(i,j,0);
-              match.table_data_time4.bc_f2 = getValueOdd(i,j,3);
-              match.table_data_time4.bc_fk2 = getValue(i,j,2);
-
-            default:
-              //console.log('undefined table: ' + market_name);
-          }
-          match.table_data_time[3] = match.table_data_time4;
-          break; //Конец четвертого периода
-
-        case 'bcg_Period1_D': //двойной шанс
-          for (var k in data[i].markets[j].p) {
-            switch (data[i].markets[j].p[k].c) {
-              case 'bc_P1_1X':
-                match.table_data_time1.bc_1X = getValue(i,j,k);
-                break;
-              case 'bc_P1_12':
-                match.table_data_time1.bc_12 = getValue(i,j,k);
-                break;
-              case 'bc_P1_X2':
-                match.table_data_time1.bc_X2 = getValue(i,j,k);
-                break;
-              default:
-              //console.log('undefined table: ' + market_name);
-            }
-          }
-          match.table_data_time[0] = match.table_data_time1;
-
-          break;
-        case 'bcg_Period2_D': //двойной шанс
-          for (var k in data[i].markets[j].p) {
-            switch (data[i].markets[j].p[k].c) {
-              case 'bc_P2_1X':
-                match.table_data_time2.bc_1X = getValue(i,j,k);
-                break;
-              case 'bc_P2_12':
-                match.table_data_time2.bc_12 = getValue(i,j,k);
-                break;
-              case 'bc_P2_X2':
-                match.table_data_time2.bc_X2 = getValue(i,j,k);
-                break;
-              default:
-              //console.log('undefined table: ' + market_name);
-            }
-          }
-          match.table_data_time[1] = match.table_data_time2;
-          break;
-        case 'bcg_Period3_D': //двойной шанс
-          for (var k in data[i].markets[j].p) {
-            switch (data[i].markets[j].p[k].c) {
-              case 'bc_P3_1X':
-                match.table_data_time3.bc_1X = getValue(i,j,k);
-                break;
-              case 'bc_P3_12':
-                match.table_data_time3.bc_12 = getValue(i,j,k);
-                break;
-              case 'bc_P3_X2':
-                match.table_data_time3.bc_X2 = getValue(i,j,k);
-                break;
-              default:
-              //console.log('undefined table: ' + market_name);
-            }
-          }
-          match.table_data_time[2] = match.table_data_time3;
-          break;
-        case 'bcg_Period4_D': //двойной шанс
-          for (var k in data[i].markets[j].p) {
-            switch (data[i].markets[j].p[k].c) {
-              case 'bc_P4_1X':
-                match.table_data_time4.bc_1X = getValue(i,j,k);
-                break;
-              case 'bc_P4_12':
-                match.table_data_time4.bc_12 = getValue(i,j,k);
-                break;
-              case 'bc_P4_X2':
-                match.table_data_time4.bc_X2 = getValue(i,j,k);
-                break;
-              default:
-              //console.log('undefined table: ' + market_name);
-            }
-          }
-          match.table_data_time[3] = match.table_data_time4;
-          break;
-
-        case 'bcg_Period1_T': //Дополнительные тоталлы по периоду 1
-          match.table_total_time1.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
-          match.table_total_time[0] = match.table_total_time1;
-          break;
-        case 'bcg_Period2_T': //Дополнительные тоталлы по периоду 2
-          match.table_total_time2.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
-          match.table_total_time[1] = match.table_total_time2;
-          break;
-        case 'bcg_Period3_T': //Дополнительные тоталлы по периоду 3
-          match.table_total_time3.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
-          match.table_total_time[2] = match.table_total_time3;
-          break;
-        case 'bcg_Period4_T': //Дополнительные тоталлы по периоду 4
-          match.table_total_time4.th.push({rate : getValue(i,j,1), b: getValue(i,j,2), m : getValue(i,j,0)});
-          match.table_total_time[3] = match.table_total_time4;
-          break;
-            
-        case 'bcg_Period1_O': //Дополнительные форы по периоду 1
-          match.table_odds_time1.th.push({f1 : getValueOdd(i,j,1), fk1 : getValue(i,j,0), f2 : getValueOdd(i,j,3), fk2 : getValue(i,j,2)});
-          match.table_odds_time[0] = match.table_odds_time1;
-          break;
-        case 'bcg_Period2_O': //Дополнительные форы по периоду 2
-          match.table_odds_time2.th.push({f1 : getValueOdd(i,j,1), fk1 : getValue(i,j,0), f2 : getValueOdd(i,j,3), fk2 : getValue(i,j,2)});
-          match.table_odds_time[1] = match.table_odds_time2;
-          break;
-        case 'bcg_Period3_O': //Дополнительные форы по периоду 3
-          match.table_odds_time3.th.push({f1 : getValueOdd(i,j,1), fk1 : getValue(i,j,0), f2 : getValueOdd(i,j,3), fk2 : getValue(i,j,2)});
-          match.table_odds_time[2] = match.table_odds_time3;
-          break;
-        case 'bcg_Period4_O': //Дополнительные форы по периоду 4
-          match.table_odds_time4.th.push({f1 : getValueOdd(i,j,1), fk1 : getValue(i,j,0), f2 : getValueOdd(i,j,3), fk2 : getValue(i,j,2)});
-          match.table_odds_time[3] = match.table_odds_time4;
-          break;
-
-        default:
-
-          switch(market_name_rus){
-            case 'Сет 1':
-              if(market_short == 'bcg_Total_99'){
-                match.table_total_time1.th.push({rate : getValue(i,j,0), b: getValue(i,j,2), m : getValue(i,j,1)});
-                match.table_total_time[0] = match.table_total_time1;
-              }
-              break;
-            case 'Сет 2':
-              if(market_short == 'bcg_Total_99'){
-                match.table_total_time2.th.push({rate : getValue(i,j,0), b: getValue(i,j,2), m : getValue(i,j,1)});
-                match.table_total_time[1] = match.table_total_time2;
-              }
-              break;
-            case 'Сет 3':
-              if(market_short == 'bcg_Total_99'){
-                match.table_total_time3.th.push({rate : getValue(i,j,0), b: getValue(i,j,2), m : getValue(i,j,1)});
-                match.table_total_time[2] = match.table_total_time3;
-              }
-              break;
-            case 'Сет 4':
-              if(market_short == 'bcg_Total_99'){
-                match.table_total_time4.th.push({rate : getValue(i,j,0), b: getValue(i,j,2), m : getValue(i,j,1)});
-                match.table_total_time[3] = match.table_total_time4;
-              }
-              break;
-            default:
-
-            //Все остальные таблицы
-            var tab_name = 'table_' + tables;
-            var arrl = data[i].markets[j].p.length;
-            //Если количество исходов больше 3, то разбиваем в 2 колонки
-            if(arrl > 3){
-              match[tab_name] = new dataTableMulti(data[i].markets[j].н);
-              var rows = Math.ceil(arrl/2);
-              var col1 = "";
-              var col2 = "";
-              for(var r = 0; r < rows; r++){
-                var k1 = r;
-                var k2 = r+rows;
-
-                col1 = {field : data[i].markets[j].p[k1].c, index : getValue(i,j,k1)};
-
-                if(k2 < arrl){
-                  col2 = {field : data[i].markets[j].p[k2].c, index : getValue(i,j,k2)};
-                }else{
-                  col2 = {field : "-", index : {value : "-", dir : "none"}};
-                }
-
-                row = {col1 : col1, col2 : col2};
-                match[tab_name].Rows.push(row);
-              }
-              match.multiTables.push(match[tab_name]);
-
-            }else{
-              match[tab_name] = new dataTable(data[i].markets[j].н);
-              for (var k in data[i].markets[j].p) {
-                match[tab_name].th.push({field : data[i].markets[j].p[k].c, index : getValue(i,j,k)});
-              } 
-              match.tables.push(match[tab_name]);
-            }
-            tables+=1;
-          }
-
-      }//Main Switch END
 
     }//Конец итерации маркетов
     var index = data[i].id;
