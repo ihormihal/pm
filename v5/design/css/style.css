@@ -369,6 +369,9 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 .large-text caption { font-size: 10px; letter-spacing: -1px; }
 .large-text td:nth-child(odd) { font-weight: bold; }
 
+
+.periodTitle {width: 100%; text-align: center; padding: 5px 0; background: #999; color: #fff;}
+
 /*-----------------------------------------
 	COPYRIGHT
 -----------------------------------------*/
@@ -582,6 +585,7 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 .fixed .top-line {height: 24px; line-height: 24px; font-size: 12px; background-position: 0 -455px;padding: 4px 25px;box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.7);border-radius: 0 0 5px 5px;}
 .fixed .top-line .code {background: none;box-shadow: none; padding: 0; font-size: 12px; border: 1px solid #ccc; border-radius: 3px; padding: 0 3px;line-height: 22px;}
 .fixed .top-line .score {font-size: 12px; padding: 0 5px;}
+
 
 @media screen and (max-width: 1080px){
     .block-table th, .block-table td.th, .th-color td:nth-child(odd){

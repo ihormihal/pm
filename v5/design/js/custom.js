@@ -1,7 +1,7 @@
 var scrollTop = 0;
 
 
-function update (){
+$(function update (){
 	if($('input#scroll').val() == '0'){
 		angular.element($('#MatchesCtrl')).scope().reloadData(true);
 		angular.element($('#TablesCtrl')).scope().$apply(function(){
@@ -14,7 +14,7 @@ function update (){
 	}else if($('input#scroll').val() == '1'){
 		scroll();
 	}
-}
+});
 
 
 function pageloadsort(callback) {

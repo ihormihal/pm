@@ -172,15 +172,8 @@ dataConvert = function (data,dataOld){
   idArray_old = idArray; //Записываем как старый
   //Итерация матчей
 
-  var allMatches = {};
-
   var tables = 0; //Счетчик других таблиц
   for (var i in idAccord) {
-    //var oneMatch = {};
-    //oneMatch
-    allMatches[data[i]['id']] = {};
-    //allMatches[data[i]['id']].markets = '';
-    allMatches[data[i]['id']].allMarkets = {};
 
     if(typeof dataOld[i] === 'undefined'){
       dataOld[i] = data[i]; //Если в следующем jsone больше матчей, то определяем данные предыдущего равными теккущему.
@@ -193,87 +186,19 @@ dataConvert = function (data,dataOld){
       dataOld[i] = data[i];
     }
 
-    //var markets = {};
     for (var j in data[i].markets) {//итерация маркетов
+
+    var markets = {};
+    markets[data[i].markets[j]["c"]] = data[i].markets[j];
+
+    console.log(markets['bcg_Odds']);
+      
+
+
+
+
       var market_name_rus = data[i].markets[j].н;
       var market_name = data[i].markets[j].c;
-
-      //allMatches[data[i]['id']].allMarkets[market_name] = data[i].markets[j];
-
-      if(market_name.indexOf('bcg_Odds') !== -1){
-        //По форе
-      }
-      else if(market_name.indexOf('bcg_Basic') !== -1){
-        //Основной
-      }
-      else if(market_name.indexOf('bcg_Double') !== -1){
-        //Двойной шанс
-      }
-      else if(market_name.indexOf('bcg_Total') !== -1){
-        //Все тоталлы
-      }
-      else if(market_name.indexOf('bcg_Pass') !== -1){
-        //Проход
-      }
-      else if(market_name.indexOf('bcg_Team1_Total') !== -1){
-        //Все тоталлы 1К
-      }
-      else if(market_name.indexOf('bcg_Team2_Total') !== -1){
-        //Все тоталлы 2К
-      }
-      else if(market_name.indexOf('bcg_Team12_Goal') !== -1){
-        //Забют обе?
-      }
-      else if(market_name.indexOf('bcg_HalfFullTime') !== -1){
-        //Тайм/Матч
-      }
-      else if(market_name.indexOf('bcg_SeriesScore') !== -1){
-        //Счет серии
-        var period = parseInt(market_name.match(/\d+/)[0]);
-      }
-      else if(market_name.indexOf('сета №') !== -1){
-        //Счет сета
-        var period = parseInt(market_name.match(/\d+/)[0]);
-      }
-      else if(market_name.indexOf('bcg_Period') !== -1){
-        var period = parseInt(market_name.match(/\d+/)[0]);
-        if(market_name.indexOf('_O') !== -1){
-          //форы
-        }
-        else if(market_name.indexOf('_T') !== -1){
-          //тоталлы
-        }
-        else if(market_name.indexOf('_DC') !== -1){
-          //двойной выбор
-        }else{
-          //другие
-        }
-      }
-      else if(market_name.indexOf('bcg_P12_T1_Goal_YN') !== -1){
-        //Забьет 1-я в каждом тайме
-      }
-      else if(market_name.indexOf('bcg_P12_T2_Goal_YN') !== -1){
-        //Забьет 2-я в каждом тайме
-      }
-      else if(market_name.indexOf('bcg_Next_Goal') !== -1){
-        //Кто забьет следующий гол 
-      }
-      else if(market_name.indexOf('bcg_NHL') !== -1){
-        //С овертаймом и буллитами
-      }
-      else if(market_name.indexOf('bcg_AwayOff') !== -1){
-        //Удаление
-      }
-      else{
-        //другие
-      }
-
-      
-
-
-
-
-      
       var market_short = market_name.substring(0, market_name.length - 1); //Отрезаем один символ в конце
       //var market_short_ = market_name.substring(0, market_name.length - 2); //Отрезаем два символа в конце
 
@@ -696,12 +621,8 @@ dataConvert = function (data,dataOld){
 
     dataOut[index] = match;
 
-    //allMatches[data[i]['id']].allMarkets = {sfdsf:'dfadfaf'};
-
   }//Конец итерации
 
   idArray.old = idArray;
-
-  console.log(allMatches);
 
 }
