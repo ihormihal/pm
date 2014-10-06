@@ -1,0 +1,21 @@
+<div class="data-table" ng-repeat="time in table_odds_time" ng-hide="hideOne(time.th.length,time)">
+  <table class="block-table {{time.lock}}">
+  <caption>{{tablename(time.tableName,match.sportKind)}}</caption>
+    <thead>
+      <tr>
+         <th>Фора</th>
+         <th>1</th>
+         <th>Фора</th>
+         <th>2</th>
+      </tr>
+   </thead>
+   <tbody class="semibold-col">
+      <tr ng-repeat="th in time.th" ng-hide="hideFirst($index)">
+         <td>{{th.f1.value}}</td>
+         <td class="{{th.fk1.dir}}">{{th.fk1.value}}</td>
+         <td>{{th.f2.value}}</td>
+         <td class="{{th.fk2.dir}}">{{th.fk2.value}}</td>
+      </tr>
+   </tbody>  
+  </table>
+</div>

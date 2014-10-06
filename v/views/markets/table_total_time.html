@@ -1,0 +1,19 @@
+<div class="data-table" ng-repeat="time in table_total_time" ng-hide="hideOne(time.th.length)">
+  <table class="block-table">
+  <caption>{{tablename(time.tableName)}}</caption>
+    <thead>
+      <tr>
+        <th>T</th>
+        <th>Б</th>
+        <th>М</th>
+      </tr>
+   </thead>
+   <tbody class="semibold-first-col">
+      <tr ng-repeat="th in time.th" ng-hide="hideFirst($index)">
+        <td>{{th.rate.value}}</td>
+        <td class="{{th.b.dir}}">{{th.b.value}}</td>
+        <td class="{{th.m.dir}}">{{th.m.value}}</td>
+      </tr>
+   </tbody>  
+  </table>
+</div>

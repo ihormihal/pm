@@ -1,6 +1,6 @@
 var dataOut = [];
-
-var Events = Evants_Old = {};
+var idArray = [];
+var idArray_old = []; //Здесь храним массив id матчей для их выбоки
 
 function dataTable(title) { //Конструктор (класс) стандартной таблицы
   this.tableName = 'title';
@@ -80,11 +80,17 @@ function isInteger(num) {
   return (num ^ 0) === num;
 }
 
-function dataConvert (Events){
+var Events = Evants_Old = {};
 
-  if(typeof Events_Old === 'undefined'){ //Для иницыализации
+function dataConvert (data,data_old){
+
+  if(typeof dataOld === 'undefined'){ //Для иницыализации
     Events_Old = Events;
   }
+
+  data.forEach(function (item) {
+    Events[item.id] = item;
+  });
 
   //Форматируем ячейки значений
   function getValue (id,i,p) {
@@ -94,12 +100,12 @@ function dataConvert (Events){
     var dif = 'none';
 
     //Проверяем, совпадают ли исходы
-    /*if(Evants_Old[id].markets[i] && Evants_Old[id].markets[i].p[p]){
+    if(Evants_Old[id].markets[i] && Evants_Old[id].markets[i].p[p]){
       if(Events[id].markets[i].p[p].c == Evants_Old[id].markets[i].p[p].c){
         old_value = parseFloat(Evants_Old[id].markets[i].p[p].k.replace(',', '.'));
         dif = (new_value > old_value) ? 'up' : (new_value < old_value) ? 'down' : 'none';
       }
-    }*/
+    }
     var out = new_value.toString();
     var add='';
     if(isInteger(new_value)){
@@ -125,12 +131,12 @@ function dataConvert (Events){
 
     //Проверяем, совпадают ли исходы
 
-    /*if(Evants_Old[id].markets[i] && Evants_Old[id].markets[i].p[p]){
+    if(Evants_Old[id].markets[i] && Evants_Old[id].markets[i].p[p]){
       if(Events[id].markets[i].p[p].c == Evants_Old[id].markets[i].p[p].c) {
         old_value = parseFloat(Evants_Old[id].markets[i].p[p].k.replace(',', '.'));
         dif = (new_value > old_value) ? 'up' : (new_value < old_value) ? 'down' : 'none';
       }
-    }*/
+    }
     
     if(new_value > 0){
       new_value = '+'+new_value;
@@ -158,13 +164,19 @@ function dataConvert (Events){
 
   var tables = 0; //Счетчик других таблиц
   
-  for (var id in Events) {
+  for (var i in Events) {
+
     var match = new Match(); //Обьект одного матча, который будет хранить только конвертированные таблицы
 
-    Events[id].markets.forEach(function(market,i){
+    if(idAccord[i] == 'new_add'){ //Если в новом наборе нет матча из старого набора - сравниваем данные сами с собой (задаем как новый)
+      idAccord[i] = i;
+      dataOld[id] = data[id];
+    }
 
-      var market_name_rus = market.н;
-      var market_name = market.c;
+    for (var i in data[id].markets) {//итерация маркетов
+
+      var market_name_rus = data[id].markets[i].н;
+      var market_name = data[id].markets[i].c;
 
       if(market_name == 'bcg_Odds'){
         //Фора основная
@@ -181,8 +193,8 @@ function dataConvert (Events){
 
       else if(market_name.indexOf('bcg_Basic') !== -1){
         //Основной
-        for (var k in market.p) {
-          switch (market.p[k].c) {
+        for (var k in data[id].markets[i].p) {
+          switch (data[id].markets[i].p[k].c) {
             case 'bc_1':
               match.table_data.bc_1 = getValue(id,i,k);
               break;
@@ -200,8 +212,8 @@ function dataConvert (Events){
 
       else if(market_name.indexOf('bcg_Double') !== -1){
         //Двойной шанс
-        for (var k in market.p) {
-          switch (market.p[k].c) {
+        for (var k in data[id].markets[i].p) {
+          switch (data[id].markets[i].p[k].c) {
             case 'bc_1X':
               match.table_data.bc_1X = getValue(id,i,k);
               break;
@@ -257,9 +269,9 @@ function dataConvert (Events){
 
       else if(market_name.indexOf('bcg_Team12_Goal') !== -1){
         //Забют обе?
-        match.table_goal.tableName = market.c;
-        for (var k in market.p) {
-          match.table_goal.th.push({field : market.p[k].c, index : getValue(id,i,k)});
+        match.table_goal.tableName = data[id].markets[i].c;
+        for (var k in data[id].markets[i].p) {
+          match.table_goal.th.push({field : data[id].markets[i].p[k].c, index : getValue(id,i,k)});
         }
       }
 
@@ -281,8 +293,8 @@ function dataConvert (Events){
         var period = parseInt(market_name.match(/\d+/)[0]);
         if(market_name.indexOf('_B') !== -1){
           var tab = 'table_data_time'+period;
-          for (var k in market.p) {
-            switch (market.p[k].c) {
+          for (var k in data[id].markets[i].p) {
+            switch (data[id].markets[i].p[k].c) {
               case 'bc_P'+period+'_1':
                 match[tab].bc_1 = getValue(id,i,k);
                 break;
@@ -293,7 +305,7 @@ function dataConvert (Events){
                 match[tab].bc_2 = getValue(id,i,k);
                 break;
               default:
-                console.log('undefined prop: ' + market.p[k].c);
+                console.log('undefined prop: ' + data[id].markets[i].p[k].c);
             }
           }
         }
@@ -356,10 +368,10 @@ function dataConvert (Events){
           //другие
           //Все остальные таблицы
           var tab_name = 'table_' + tables;
-          var arrl = market.p.length;
+          var arrl = data[id].markets[i].p.length;
           //Если количество исходов больше 3, то разбиваем в 2 колонки
           if(arrl > 3){
-            match[tab_name] = new dataTableMulti(market.н);
+            match[tab_name] = new dataTableMulti(data[id].markets[i].н);
             var rows = Math.ceil(arrl/2);
             var col1 = "";
             var col2 = "";
@@ -367,10 +379,10 @@ function dataConvert (Events){
               var k1 = r;
               var k2 = r+rows;
 
-              col1 = {field : market.p[k1].c, index : getValue(id,i,k1)};
+              col1 = {field : data[id].markets[i].p[k1].c, index : getValue(id,i,k1)};
 
               if(k2 < arrl){
-                col2 = {field : market.p[k2].c, index : getValue(id,i,k2)};
+                col2 = {field : data[id].markets[i].p[k2].c, index : getValue(id,i,k2)};
               }else{
                 col2 = {field : "-", index : {value : "-", dir : "none"}};
               }
@@ -381,9 +393,9 @@ function dataConvert (Events){
             match.multiTables.push(match[tab_name]);
 
           }else{
-            match[tab_name] = new dataTable(market.н);
-            for (var k in market.p) {
-              match[tab_name].th.push({field : market.p[k].c, index : getValue(id,i,k)});
+            match[tab_name] = new dataTable(data[id].markets[i].н);
+            for (var k in data[id].markets[i].p) {
+              match[tab_name].th.push({field : data[id].markets[i].p[k].c, index : getValue(id,i,k)});
             } 
             match.tables.push(match[tab_name]);
           }
@@ -391,12 +403,16 @@ function dataConvert (Events){
         }
       }
 
-    });//Конец итерации маркетов
+    }//Конец итерации маркетов
+    var index = data[id].id;
 
-    dataOut[id] = match;
+    dataOut[index] = match;
 
 
   }//Конец итерации
 
-  Evants_Old = Events;
+  data_old.forEach(function (item) {
+    Evants_Old[item.id] = item;
+  });
+
 }

@@ -8261,7 +8261,7 @@
               <!--MAIN BLOCK BODY-->
             
             <div ng-show="match.markets" class="main-block-body" ng-controller="TablesCtrl" data-ng-init="loadTable(match.id)" id="TablesCtrl">
-              <div class="lock liveStatus_{{match.liveStatus}}"></div>
+              <!--div class="lock liveStatus_{{match.liveStatus}}"></div-->
               <table class="block-table large">
                 <thead>
                   <tr>
@@ -8350,29 +8350,6 @@
                   </table>
                 </div>
 
-                <!--Фора по таймам-->
-                <div class="data-table isotope" ng-repeat="time in table_odds_time" ng-show="time">
-                  <table class="block-table {{time.lock}}">
-                  <caption>Фора ({{tablename(time.tableName,match.sportKind)}})</caption>
-                    <thead>
-                      <tr>
-                         <th>Фора</th>
-                         <th>1</th>
-                         <th>Фора</th>
-                         <th>2</th>
-                      </tr>
-                   </thead>
-                   <tbody class="semibold-col">
-                      <tr ng-repeat="th in time.th">
-                         <td>{{th.f1.value}}</td>
-                         <td class="{{th.fk1.dir}}"><div class="arrow">{{th.fk1.value}}</div></td>
-                         <td>{{th.f2.value}}</td>
-                         <td class="{{th.fk2.dir}}"><div class="arrow">{{th.fk2.value}}</div></td>
-                      </tr>
-                   </tbody>  
-                  </table>
-                </div>
-
                 <!--Тотал общий-->
                 <div class="data-table isotope" ng-show="{{table_total.th}}">
                   <table class="block-table">
@@ -8425,10 +8402,36 @@
                   </table>
                 </div>
 
-                <!--Тотал общий по таймам-->
-                <div class="data-table isotope" ng-repeat="time in table_total_time" ng-show="time">
+                <!--div class="clear"></div>
+                <div class="periodTitle">Период 1</div-->
+
+                <!--time1-->
+                <!--Фора1-->
+                <div class="data-table" ng-show="table_odds_time[0]">
+                  <table class="block-table {{time.lock}}">
+                  <caption>Фора ({{tablename(table_odds_time[0].tableName,match.sportKind)}})</caption>
+                    <thead>
+                      <tr>
+                         <th>Фора</th>
+                         <th>1</th>
+                         <th>Фора</th>
+                         <th>2</th>
+                      </tr>
+                   </thead>
+                   <tbody class="semibold-col">
+                      <tr ng-repeat="th in table_odds_time[0].th">
+                         <td>{{th.f1.value}}</td>
+                         <td class="{{th.fk1.dir}}"><div class="arrow">{{th.fk1.value}}</div></td>
+                         <td>{{th.f2.value}}</td>
+                         <td class="{{th.fk2.dir}}"><div class="arrow">{{th.fk2.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+                <!--Тотал1-->
+                <div class="data-table" ng-show="table_total_time[0]">
                   <table class="block-table">
-                  <caption>Тотал ({{tablename(time.tableName,match.sportKind)}})</caption>
+                  <caption>Тотал ({{tablename(table_total_time[0].tableName,match.sportKind)}})</caption>
                     <thead>
                       <tr>
                         <th>T</th>
@@ -8437,7 +8440,7 @@
                       </tr>
                    </thead>
                    <tbody class="semibold-first-col">
-                      <tr ng-repeat="th in time.th">
+                      <tr ng-repeat="th in table_total_time[0].th">
                         <td>{{th.rate.value}}</td>
                         <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
                         <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
@@ -8445,6 +8448,157 @@
                    </tbody>  
                   </table>
                 </div>
+                <!--time1 end-->
+
+                <!--div class="clear"></div-->
+                <!--div class="periodTitle">Период 2</div-->
+
+                <!--time2-->
+                <!--Фора2-->
+                <div class="data-table" ng-show="table_odds_time[1]">
+                  <table class="block-table {{time.lock}}">
+                  <caption>Фора ({{tablename(table_odds_time[1].tableName,match.sportKind)}})</caption>
+                    <thead>
+                      <tr>
+                         <th>Фора</th>
+                         <th>1</th>
+                         <th>Фора</th>
+                         <th>2</th>
+                      </tr>
+                   </thead>
+                   <tbody class="semibold-col">
+                      <tr ng-repeat="th in table_odds_time[1].th">
+                         <td>{{th.f1.value}}</td>
+                         <td class="{{th.fk1.dir}}"><div class="arrow">{{th.fk1.value}}</div></td>
+                         <td>{{th.f2.value}}</td>
+                         <td class="{{th.fk2.dir}}"><div class="arrow">{{th.fk2.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+                <!--Тотал2-->
+                <div class="data-table" ng-show="table_total_time[1]">
+                  <table class="block-table">
+                  <caption>Тотал ({{tablename(table_total_time[1].tableName,match.sportKind)}})</caption>
+                    <thead>
+                      <tr>
+                        <th>T</th>
+                        <th>Б</th>
+                        <th>М</th>
+                      </tr>
+                   </thead>
+                   <tbody class="semibold-first-col">
+                      <tr ng-repeat="th in table_total_time[1].th">
+                        <td>{{th.rate.value}}</td>
+                        <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
+                        <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+                <!--time2 end-->
+
+                <!--div class="clear"></div-->
+                <!--div class="periodTitle">Период 3</div-->
+
+                <!--time3-->
+                <!--Фора3-->
+                <div class="data-table" ng-show="table_odds_time[2]">
+                  <table class="block-table {{time.lock}}">
+                  <caption>Фора ({{tablename(table_odds_time[2].tableName,match.sportKind)}})</caption>
+                    <thead>
+                      <tr>
+                         <th>Фора</th>
+                         <th>1</th>
+                         <th>Фора</th>
+                         <th>2</th>
+                      </tr>
+                   </thead>
+                   <tbody class="semibold-col">
+                      <tr ng-repeat="th in table_odds_time[2].th">
+                         <td>{{th.f1.value}}</td>
+                         <td class="{{th.fk1.dir}}"><div class="arrow">{{th.fk1.value}}</div></td>
+                         <td>{{th.f2.value}}</td>
+                         <td class="{{th.fk2.dir}}"><div class="arrow">{{th.fk2.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+                <!--Тотал3-->
+                <div class="data-table" ng-show="table_total_time[2]">
+                  <table class="block-table">
+                  <caption>Тотал ({{tablename(table_total_time[2].tableName,match.sportKind)}})</caption>
+                    <thead>
+                      <tr>
+                        <th>T</th>
+                        <th>Б</th>
+                        <th>М</th>
+                      </tr>
+                   </thead>
+                   <tbody class="semibold-first-col">
+                      <tr ng-repeat="th in table_total_time[2].th">
+                        <td>{{th.rate.value}}</td>
+                        <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
+                        <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+                <!--time3 end-->
+
+                <!--div class="clear"></div-->
+                <!--div class="periodTitle">Период 4</div-->
+
+                <!--time4-->
+                <!--Фора4-->
+                <div class="data-table" ng-show="table_odds_time[3]">
+                  <table class="block-table {{time.lock}}">
+                  <caption>Фора ({{tablename(table_odds_time[3].tableName,match.sportKind)}})</caption>
+                    <thead>
+                      <tr>
+                         <th>Фора</th>
+                         <th>1</th>
+                         <th>Фора</th>
+                         <th>2</th>
+                      </tr>
+                   </thead>
+                   <tbody class="semibold-col">
+                      <tr ng-repeat="th in table_odds_time[3].th">
+                         <td>{{th.f1.value}}</td>
+                         <td class="{{th.fk1.dir}}"><div class="arrow">{{th.fk1.value}}</div></td>
+                         <td>{{th.f2.value}}</td>
+                         <td class="{{th.fk2.dir}}"><div class="arrow">{{th.fk2.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+                <!--Тотал4-->
+                <div class="data-table" ng-show="table_total_time[3]">
+                  <table class="block-table">
+                  <caption>Тотал ({{tablename(table_total_time[3].tableName,match.sportKind)}})</caption>
+                    <thead>
+                      <tr>
+                        <th>T</th>
+                        <th>Б</th>
+                        <th>М</th>
+                      </tr>
+                   </thead>
+                   <tbody class="semibold-first-col">
+                      <tr ng-repeat="th in table_total_time[3].th">
+                        <td>{{th.rate.value}}</td>
+                        <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
+                        <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+                <!--time4 end-->
+
+                <!--time5-->
+                <!--time5 end-->
+
+                <!--div class="clear"></div-->
+                <!--div class="periodTitle">Розписи</div-->
                 
                 <!--Забьют обе?-->
                 <div class="data-table isotope" ng-show="table_goal.th">
@@ -8472,7 +8626,7 @@
                   </table>
                 </div>
 
-                <!--Другие маркеты 3collum-->
+                <!--Другие маркеты 2collum-->
                 <div class="data-table isotope" ng-repeat="multitable in multiTables">
                   <table class="block-table th-color">
                     <caption>{{translate(multitable.tableName)}}</caption>
