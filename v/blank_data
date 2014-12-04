@@ -1,0 +1,28 @@
+{
+  "events": [
+  {
+      "id": "0000",
+      "team1": "TEST",
+      "team2": "TEST",
+      "dateStart": "20140529T1130",
+      "liveStatus": "1",
+      "sportKind": "30",
+      "sportName": "TEST",
+      "razdName": "TEST. TEST. TEST",
+      "status": "P1",
+      "score": "0-0",
+      "score1": "",
+      "score2": "",
+      "score3": "",
+      "score4": "",
+      "score5": "",
+      "scoreg": "",
+      "mins": "45",
+      "stats": {
+        "ServeTeam": "0"
+        },
+      "markets": [
+      ]
+    }
+  ]
+}

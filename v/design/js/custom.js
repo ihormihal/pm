@@ -1,50 +1,20 @@
 var scrollTop = 0;
 
 
-$(function update (){
-	if($('input#scroll').val() == '0'){
+function update (){
+	//if($('input#scroll').val() == '0'){
 		angular.element($('#MatchesCtrl')).scope().reloadData(true);
 		angular.element($('#TablesCtrl')).scope().$apply(function(){
-			//pageloadsort(function(){
+
 				$('input#scroll').val('1');
 				$('#overlay_loading').remove();
 				scroll();
-			//});
 		});
-	}else if($('input#scroll').val() == '1'){
-		scroll();
-	}
-});
-
-
-function pageloadsort(callback) {
-
-	var markers = {}; //Массив значениы высоты маркеров
-	var rightH = 0;
-	var leftH = 0;
-	var leftCol = true;
-
-	$('.main-block').each(function(index){
-		var thisHeight = $(this).outerHeight(true);
-
-		//Расположение
-		if(leftH > rightH && index !== 0){
-	    $(this).css({top:rightH,right:'0',left:'auto'}); //to Right
-
-	    rightH+=thisHeight;
-
-	  }else if(rightH >= leftH){
-	    $(this).css({top:leftH,right:'auto',left:'0'}); //to Left
-
-	    leftH+=thisHeight;
-	  }
-
-	});
-	
-	callback();
+	//}else if($('input#scroll').val() == '1'){
+		//scroll();
+	//}
 }
 
-//setInterval(scroll, 6000);
 
 function scroll(){
 	$('#overlay').fadeIn("250",function(){

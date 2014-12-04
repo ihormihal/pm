@@ -1,6 +1,8 @@
 var dataOut = [];
 
-var Events = Evants_Old = {};
+var Events = Events_Old = {};
+
+var firstload = true;
 
 function dataTable(title) { //Конструктор (класс) стандартной таблицы
   this.tableName = 'title';
@@ -81,11 +83,6 @@ function isInteger(num) {
 }
 
 function dataConvert (Events){
-
-  if(typeof Events_Old === 'undefined'){ //Для иницыализации
-    Events_Old = Events;
-  }
-
   //Форматируем ячейки значений
   function getValue (id,i,p) {
     var new_value = parseFloat(Events[id].markets[i].p[p].k.replace(',', '.'));
@@ -94,12 +91,14 @@ function dataConvert (Events){
     var dif = 'none';
 
     //Проверяем, совпадают ли исходы
-    /*if(Evants_Old[id].markets[i] && Evants_Old[id].markets[i].p[p]){
-      if(Events[id].markets[i].p[p].c == Evants_Old[id].markets[i].p[p].c){
-        old_value = parseFloat(Evants_Old[id].markets[i].p[p].k.replace(',', '.'));
-        dif = (new_value > old_value) ? 'up' : (new_value < old_value) ? 'down' : 'none';
+    if(Events_Old.hasOwnProperty(id)){
+      if(Events_Old[id].markets[i] && Events_Old[id].markets[i].p[p]){
+        if(Events[id].markets[i].p[p].c == Events_Old[id].markets[i].p[p].c){
+          old_value = parseFloat(Events_Old[id].markets[i].p[p].k.replace(',', '.'));
+          dif = (new_value > old_value) ? 'up' : (new_value < old_value) ? 'down' : 'none';
+        }
       }
-    }*/
+    }
     var out = new_value.toString();
     var add='';
     if(isInteger(new_value)){
@@ -124,13 +123,14 @@ function dataConvert (Events){
     var dif = 'none';
 
     //Проверяем, совпадают ли исходы
-
-    /*if(Evants_Old[id].markets[i] && Evants_Old[id].markets[i].p[p]){
-      if(Events[id].markets[i].p[p].c == Evants_Old[id].markets[i].p[p].c) {
-        old_value = parseFloat(Evants_Old[id].markets[i].p[p].k.replace(',', '.'));
-        dif = (new_value > old_value) ? 'up' : (new_value < old_value) ? 'down' : 'none';
+    if(Events_Old.hasOwnProperty(id)){
+      if(Events_Old[id].markets[i] && Events_Old[id].markets[i].p[p]){
+        if(Events[id].markets[i].p[p].c == Events_Old[id].markets[i].p[p].c){
+          old_value = parseFloat(Events_Old[id].markets[i].p[p].k.replace(',', '.'));
+          dif = (new_value > old_value) ? 'up' : (new_value < old_value) ? 'down' : 'none';
+        }
       }
-    }*/
+    }
     
     if(new_value > 0){
       new_value = '+'+new_value;
@@ -150,6 +150,76 @@ function dataConvert (Events){
     }
     return {value: new_value+add, dir : dif};
   }
+
+  ///////////////////////////////////
+  var tables_counter = 1;
+  function createGeneralTable (id,i){
+    var tab_name = 'table_' + tables_counter;
+    var arrl = Events[id].markets[i].p.length;
+
+    if(arrl >= 6 && arrl < 12){
+      match[tab_name] = new dataTableMulti(Events[id].markets[i].н);
+
+      var rows = Math.ceil(arrl/2);
+      var col1 = {show: false};
+      var col2 = {show: false};
+      for(var r = 0; r < rows; r++){
+        var k1 = r;
+        var k2 = r+rows;
+
+        if(k1 < (rows-1)){
+          col1 = {show: true, field : Events[id].markets[i].p[k1].c, index : getValue(id,i,k1)};
+        }
+
+        if(k2 > (rows-1) && r < (2*rows-1) && k2 < arrl){
+          col2 = {show: true, field : Events[id].markets[i].p[k2].c, index : getValue(id,i,k2)};
+        }else{
+          col2 = {show: true, field : "-", index : {value : "-", dir : "none"}};
+        }
+        row = {col1 : col1, col2 : col2};
+        match[tab_name].Rows.push(row);
+      }
+      match.multiTables.push(match[tab_name]);
+
+    }else if(arrl >= 12){
+      match[tab_name] = new dataTableMulti(Events[id].markets[i].н);
+
+      var rows = Math.ceil(arrl/3);
+      var col1 = {show: false};
+      var col2 = {show: false};
+      var col3 = {show: false};
+
+      for(var r = 0; r < rows; r++){
+        var k1 = r;
+        var k2 = r+rows;
+        var k3 = r+rows+rows;
+
+        if(k1 < (rows-1)){
+          col1 = {show: true, field : Events[id].markets[i].p[k1].c, index : getValue(id,i,k1)};
+        }
+        if(k2 > (rows-1) && r < (2*rows-1)){
+          col2 = {show: true, field : Events[id].markets[i].p[k1].c, index : getValue(id,i,k2)};
+        }
+        if(k3 > (2*rows-1) && k3 < arrl){
+          col3 = {show: true, field : Events[id].markets[i].p[k1].c, index : getValue(id,i,k3)};
+        }else{
+          col3 = {show: true, field : "-", index : {value : "-", dir : "none"}};
+        }
+        row = {col1 : col1, col2 : col2, col3 : col3};
+        match[tab_name].Rows.push(row);
+      }
+      match.multiTables.push(match[tab_name]);
+
+    }else{
+      match[tab_name] = new dataTable(Events[id].markets[i].н);
+      for (var k in Events[id].markets[i].p) {
+        match[tab_name].th.push({field : Events[id].markets[i].p[k].c, index : getValue(id,i,k)});
+      } 
+      match.tables.push(match[tab_name]);
+    }
+    tables_counter++;
+  }
+  ///////////////////////////////////
 
   /*function getScore (str){
     var score = str.split("");
@@ -235,9 +305,23 @@ function dataConvert (Events){
       else if(market_name.indexOf('bcg_Total_') !== -1){
         if(market_name == 'bcg_Total_EO'){
           //Чет-нечет
-        }else{
+        }
+        /*else if(market_name == 'bcg_Total_Groups'){
+          //Groups тотал матча
+          //2-3 гола или 4 и больше голов
+        }
+        else if(market_name_rus.indexOf('Инд. тотал') !== -1){
+          var period = parseInt(market_name_rus.match(/\d+/)[0]);
+          //инд-тотал четверти
+        }else if(market_name_rus.indexOf('Иннинг') !== -1){
+          //Тотал ининга
+        }*/
+        else if(market_name.length == 11){
           //Тоталлы дополнительные
           match.table_total.th.push({rate : getValue(id,i,1), b: getValue(id,i,2), m : getValue(id,i,0)});
+        }
+        else{
+          createGeneralTable(id,i);
         }
       }
 
@@ -355,39 +439,7 @@ function dataConvert (Events){
         }else{
           //другие
           //Все остальные таблицы
-          var tab_name = 'table_' + tables;
-          var arrl = market.p.length;
-          //Если количество исходов больше 3, то разбиваем в 2 колонки
-          if(arrl > 3){
-            match[tab_name] = new dataTableMulti(market.н);
-            var rows = Math.ceil(arrl/2);
-            var col1 = "";
-            var col2 = "";
-            for(var r = 0; r < rows; r++){
-              var k1 = r;
-              var k2 = r+rows;
-
-              col1 = {field : market.p[k1].c, index : getValue(id,i,k1)};
-
-              if(k2 < arrl){
-                col2 = {field : market.p[k2].c, index : getValue(id,i,k2)};
-              }else{
-                col2 = {field : "-", index : {value : "-", dir : "none"}};
-              }
-
-              row = {col1 : col1, col2 : col2};
-              match[tab_name].Rows.push(row);
-            }
-            match.multiTables.push(match[tab_name]);
-
-          }else{
-            match[tab_name] = new dataTable(market.н);
-            for (var k in market.p) {
-              match[tab_name].th.push({field : market.p[k].c, index : getValue(id,i,k)});
-            } 
-            match.tables.push(match[tab_name]);
-          }
-          tables+=1;
+          createGeneralTable(id,i);
         }
       }
 
@@ -396,7 +448,10 @@ function dataConvert (Events){
     dataOut[id] = match;
 
 
-  }//Конец итерации
 
-  Evants_Old = Events;
+  }//Конец итерации
+  //console.log(JSON.stringify(dataOut));
+
+  Events_Old = Events;
+  Events = {};
 }

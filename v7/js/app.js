@@ -13,7 +13,7 @@ myApp.controller('MatchesCtrl', ['$scope', function ($scope, $http) {
     data_object.events.forEach(function (item) {
       Events[item.id] = item;
     });
-    dataConvert(Events);
+    //dataConvert(Events);
     data_object.events = '';
 
     $scope.matchList = Events;
@@ -67,13 +67,17 @@ myApp.controller('MatchesCtrl', ['$scope', function ($scope, $http) {
 
 
   //Показываем, чья подача
-  $scope.serveTeam = function (serve, team) {
+  /*$scope.serveTeam = function (serve, team) {
     if(parseInt(serve) > 0 && team == 'any'){
       return true;
     }
     if(serve == team){
       return 'serve';
     }
+  }*/
+
+  $scope.getScore = function (score) {
+    return score.replace('-',':');
   }
 
   //Проверка статуса времени матча
@@ -149,14 +153,14 @@ myApp.controller('MatchesCtrl', ['$scope', function ($scope, $http) {
     }
   }
 
-  $scope.loadHTable=function(skind) {
+  /*$scope.loadHTable=function(skind) {
     var template = 'views/header/events_table.html';
     var template_selector = 'skind_'+skind;
     if(template_selector in periods_table){
       template = 'views/header/events_table_'+periods_table[template_selector]+'.html';
     }
     return template;
-  }
+  }*/
 
   $scope.loadMainTable=function() {
     return 'views/markets/main_marketsNew.html';
@@ -253,31 +257,45 @@ myApp.controller('MatchesCtrl', ['$scope', function ($scope, $http) {
     return sc[parseInt(team)-1];
   }
 
+  //таблицы в несколько колонок
+  $scope.multicol = function (length) {
+    var classname = "";
+    if(parseInt(length+"") > 7){
+      classname = "multicol two-coll";
+    }
+    if(parseInt(length+"") > 11){
+      classname = "multicol three-coll";
+    }
+    return classname;
+  }
+
 }]);
 
 myApp.controller('TablesCtrl', ['$scope', function ($scope) {
+  if(dataOut.length > 0){
+    $scope.loadTable = function (index) {
+      $scope.table_data = dataOut[index].table_data;//Главная таблица
+      $scope.table_data_time = dataOut[index].table_data_time;//Главная таблица-периоды
 
-  $scope.loadTable = function (index) {
-    $scope.table_data = dataOut[index].table_data;//Главная таблица
-    $scope.table_data_time = dataOut[index].table_data_time;//Главная таблица-периоды
+      $scope.table_main = dataOut[index].table_main;//Основной
+      $scope.table_main_time = dataOut[index].table_main_time;//Основной по таймам
+      $scope.table_odds = dataOut[index].table_odds;//Фора
+      $scope.table_odds_time = dataOut[index].table_odds_time;//Фора по таймам
 
-    $scope.table_main = dataOut[index].table_main;//Основной
-    $scope.table_main_time = dataOut[index].table_main_time;//Основной по таймам
-    $scope.table_odds = dataOut[index].table_odds;//Фора
-    $scope.table_odds_time = dataOut[index].table_odds_time;//Фора по таймам
+      $scope.table_total = dataOut[index].table_total;//Тотал
+      $scope.table_total_team1 = dataOut[index].table_total_team1;//Тотал 1-й комманды
+      $scope.table_total_team2 = dataOut[index].table_total_team2;//Тотал 2-й комманды
+      $scope.table_total_time = dataOut[index].table_total_time;//Тотал по таймам
 
-    $scope.table_total = dataOut[index].table_total;//Тотал
-    $scope.table_total_team1 = dataOut[index].table_total_team1;//Тотал 1-й комманды
-    $scope.table_total_team2 = dataOut[index].table_total_team2;//Тотал 2-й комманды
-    $scope.table_total_time = dataOut[index].table_total_time;//Тотал по таймам
+      //$scope.table_total_eo = dataOut[index].table_eo;//Чет-не чет
+      $scope.table_goal = dataOut[index].table_goal;//Забьют обе?
+      //$scope.table_score = dataOut[index].table_score;//Счет матча
 
-    //$scope.table_total_eo = dataOut[index].table_eo;//Чет-не чет
-    $scope.table_goal = dataOut[index].table_goal;//Забьют обе?
-    $scope.table_score = dataOut[index].table_score;//Счет матча
-
-    $scope.tables = dataOut[index].tables;//Другие маркеты
-    $scope.multiTables = dataOut[index].multiTables;//Другие маркеты 3collum
-  };
+      $scope.tables = dataOut[index].tables;//Другие маркеты
+      $scope.multiTables = dataOut[index].multiTables;//Другие маркеты 3collum
+    };
+  }
+  
 
   function reloadTables() {
     $scope.$apply();

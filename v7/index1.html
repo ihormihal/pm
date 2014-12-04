@@ -11,39 +11,52 @@
    <script src="js/data-convert.js" type="text/javascript" charset="utf-8"></script>
    <script src="js/app.js"></script>
    <script src="design/js/custom.js"></script>
+   <style>
+   .block-table.large th {
+      border-top: 1px solid #FFD07C;
+      border-bottom: 1px solid #996600;
+      background: #F2B05C;
+      background: -webkit-linear-gradient(top, #ecb432 0%, #F2B05C 100%);
+      color: #333;
+   }
+   .block-table caption {
+    background: #F2B05C;
+    background: -webkit-linear-gradient(top, #ecb432 0%, #F2B05C 100%);
+   }
+   </style>
 </head>
 
 <body>
   <input type="hidden" id="scroll" name="scroll" value="0"/>
   <div id="json" style="display:none;">
     {
-  "events": [
-  {
-      "id": "0000",
-      "team1": "TEST",
-      "team2": "TEST",
-      "dateStart": "20140529T1130",
-      "liveStatus": "1",
-      "sportKind": "30",
-      "sportName": "TEST",
-      "razdName": "TEST. TEST. TEST",
-      "status": "P1",
-      "score": "0-0",
-      "score1": "",
-      "score2": "",
-      "score3": "",
-      "score4": "",
-      "score5": "",
-      "scoreg": "",
-      "mins": "45",
-      "stats": {
-        "ServeTeam": "0"
-        },
-      "markets": [
-      ]
-    }
-  ]
-}
+    "events": [
+    {
+        "id": "0000",
+        "team1": "TEST",
+        "team2": "TEST",
+        "dateStart": "20140529T1130",
+        "liveStatus": "1",
+        "sportKind": "30",
+        "sportName": "TEST",
+        "razdName": "TEST. TEST. TEST",
+        "status": "P1",
+        "score": "0-0",
+        "score1": "",
+        "score2": "",
+        "score3": "",
+        "score4": "",
+        "score5": "",
+        "scoreg": "",
+        "mins": "45",
+        "stats": {
+          "ServeTeam": "0"
+          },
+        "markets": [
+        ]
+      }
+    ]
+  }
   </div>
     <section id="body">
       <div id="overlay_loading"></div>
@@ -55,7 +68,7 @@
             <div id="{{match.id}}" data-sport="{{match.sportKind}}" class="main-block skind_{{match.sportKind}}" ng-repeat="match in matchList">
 
             <!-- main-block -->
-            <!--div class="data-overlay" data-id="{{match.id}}"></div-->
+            <div class="data-overlay" data-id="{{match.id}}"></div>
             <div class="main-block-header">
               <div class="top-line">
                 <div class="left title"><span class="sport-kind-icon"></span>{{cropStr(match.razdName,'50')}}</div>
@@ -75,9 +88,9 @@
                   <tr>
                     <td class="match-code">{{match.id}}</td>
                     <td class="team">
-                      <h2 class="team1 serve serve{{match.stats.ServeTeam}}">{{match.team1}}</h2>
+                      <h2 class="team1 serve serv{{match.stats.ServeTeam}}">{{match.team1}}</h2>
                       <h2>-</h2>
-                      <h2 class="team2 serve serve{{match.stats.ServeTeam}}">{{match.team2}}</h2>
+                      <h2 class="team2 serve serv{{match.stats.ServeTeam}}">{{match.team2}}</h2>
                     </td>                
                     <td class="time-count">
                       <span ng-show="match.mins" class="icoTimer {{icoTime(match.mins)}}">{{showTime(match.mins)}}</span>
@@ -112,13 +125,13 @@
                     <th ng-show="hideDC(match.sportKind)">1Х</th>
                     <th ng-show="hideDC(match.sportKind)">12</th>
                     <th ng-show="hideDC(match.sportKind)">Х2</th>
-                    <th>Ф1</th>
+                    <th>Фора 1</th>
                     <th>КФ</th>
-                    <th>Ф2</th>
+                    <th>Фора 2</th>
                     <th>КФ</th>
-                    <th>Т</th>
-                    <th>Б</th>
-                    <th>М</th>
+                    <th>Тотал</th>
+                    <th>Больше</th>
+                    <th>Меньше</th>
                   </tr>
                 </thead><thead>
                 </thead><tbody>
@@ -345,12 +358,4 @@
     </section><!--/body-wrapper-->
 
 </body>
-<!--script>
-$(function(){
-  update();
-});
-</script-->
-<!--style>
-  #overlay_loading {display: none;}
-</style-->
 </html>
