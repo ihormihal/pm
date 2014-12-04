@@ -1,4 +1,5 @@
 var scrollTop = 0;
+var window_h = window.innerHeight;
 
 function update (){
 	if($('input#scroll').val() == '0'){
@@ -16,14 +17,16 @@ function update (){
 }
 
 function onePageSort(callback){
-	var window_h = window.innerHeight;
 	var margin = 10;
 
 	var toTop = 0;
 	var onScreen = 0;
 	var onScreen_h = 0;
 	var screens = 0;
+	var totalHeight = 0;
 	var length = $('#events > .main-block').length;
+
+	var topHeights = [];
 	$('#events > .main-block').each(function(i){
 		element_h = $(this).outerHeight()+margin;
 
@@ -38,6 +41,11 @@ function onePageSort(callback){
 			onScreen_h = element_h;
 		}
 
+		topHeights[$(this).attr('id')] = toTop;
+		if(i == length-1){
+			totalHeight = toTop+$(this).height();
+		}
+
 		$(this).css('top',toTop);
 
 		toTop += element_h;
@@ -49,12 +57,27 @@ function onePageSort(callback){
 			}
 		}
 	});
+
+	var coef = totalHeight==0 ? 0 : window_h/totalHeight;
+	var scrollBar_h = window_h*coef
+	for(var i in topHeights){
+		$('#legend #item-'+i).css('top',Math.round(topHeights[i]*coef)).attr('data-y',topHeights[i]);
+	}
+
+	updateLegend();
+
 	callback();
 }
 
+window.onresize = function(event) {
+	window_h = window.innerHeight;
+	onePageSort(function(){
+		console.log('screen updated');
+	});
+};
+
 
 function scroll(){
-	var window_h = window.innerHeight;
 	$('#overlay').fadeIn("250",function(){
 		$("body,html").scrollTop(scrollTop);
 		scrollTop = scrollTop+window_h;
@@ -64,6 +87,26 @@ function scroll(){
 		}
 	}).fadeOut("250",function(){
 		//showBar(50);
+	});
+	
+
+}
+
+
+window.onscroll = function(){
+	updateLegend();
+};
+
+function updateLegend(){
+	$('#legend .item').each(function(){
+		var item_top = parseInt($(this).attr('data-y'));
+		var scr = document.body.scrollTop;
+
+		if(scr+window_h >= item_top && scr <= item_top){
+			$(this).addClass('active');
+		}else{
+			$(this).removeClass('active');
+		}
 	});
 }
 

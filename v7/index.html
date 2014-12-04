@@ -43,7 +43,7 @@
         <div class="wrapper" ng-controller="MatchesCtrl" data-ng-init="loadMathes()" id="MatchesCtrl">
           <!--div class="navPage">events: {{matchList.length}}</div-->
           <div id="events">
-            <div id="legend"><div class="item" id="legend_{{match.id}}" ng-repeat="match in matchList">{{match.id}}</div></div>
+            <div id="legend"><div class="item" id="item-{{match.id}}" ng-repeat="match in matchList">{{match.id}}</div></div>
             <div id="{{match.id}}" data-sport="{{match.sportKind}}" class="main-block skind_{{match.sportKind}}" ng-repeat="match in matchList">
 
             <!-- main-block -->
