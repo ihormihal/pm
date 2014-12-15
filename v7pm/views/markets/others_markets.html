@@ -1,0 +1,11 @@
+<div class="data-table" ng-repeat="table in tables" ng-show="table.th">
+  <table class="block-table left-align">
+    <caption>{{translate(table.tableName,match.team1,match.team2)}}</caption>
+    <tbody>
+      <tr ng-repeat="th in table.th">
+        <td class="green-text">{{translate(th.field,match.team1,match.team2)}}</td>
+        <td class="{{th.index.dir}}">{{th.index.value}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

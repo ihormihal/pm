@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+   <title>PariMatch TEST</title>
+   <link href="design/css/style.css" rel="stylesheet">
+
+   <script src="design/js/jquery-2.1.0.min.js"></script>
+   <script src="js/angular.min.js"></script>
+   <script src="js/translate_ru.js" type="text/javascript" charset="utf-8"></script>
+   <script src="js/data-convert.js" type="text/javascript" charset="utf-8"></script>
+   <script src="js/app.js"></script>
+   <script src="design/js/custom.js"></script>
+   <style>
+   .block-table.large th {
+      border-top: 1px solid #FFD07C;
+      border-bottom: 1px solid #996600;
+      background: #F2B05C;
+      background: -webkit-linear-gradient(top, #ecb432 0%, #F2B05C 100%);
+      color: #333;
+   }
+   .block-table caption {
+    background: #F2B05C;
+    background: -webkit-linear-gradient(top, #ecb432 0%, #F2B05C 100%);
+   }
+   </style>
+</head>
+
+<body>
+  <input type="hidden" id="scroll" name="scroll" value="0"/>
+  <div id="json" style="display:none;">
+    {
+    "events": [
+    {
+        "id": "0000",
+        "team1": "TEST",
+        "team2": "TEST",
+        "dateStart": "20140529T1130",
+        "liveStatus": "1",
+        "sportKind": "30",
+        "sportName": "TEST",
+        "razdName": "TEST. TEST. TEST",
+        "status": "P1",
+        "score": "0-0",
+        "score1": "",
+        "score2": "",
+        "score3": "",
+        "score4": "",
+        "score5": "",
+        "scoreg": "",
+        "mins": "45",
+        "stats": {
+          "ServeTeam": "0"
+          },
+        "markets": [
+        ]
+      }
+    ]
+  }
+  </div>
+    <section id="body">
+      <div id="overlay_loading"></div>
+      <section id="content" ng-app="myApp">
+      <div id="overlay"></div>
+        <div class="wrapper" ng-controller="MatchesCtrl" data-ng-init="loadMathes()" id="MatchesCtrl">
+          <!--div class="navPage">events: {{matchList.length}}</div-->
+          <div id="events">
+            <div id="legend"><div class="item" id="item-{{match.id}}" ng-repeat="match in matchList">{{match.id}}</div></div>
+            <div id="{{match.id}}" data-sport="{{match.sportKind}}" class="main-block skind_{{match.sportKind}}" ng-repeat="match in matchList">
+
+            <!-- main-block -->
+            <div class="data-overlay" data-id="{{match.id}}"></div>
+            <div class="main-block-header">
+              <div class="top-line">
+                <div class="left title"><span class="sport-kind-icon"></span>{{cropStr(match.razdName,'50')}}</div>
+                <div class="right code">{{match.id}}</div>
+                <div class="code_label">Код игры:</div>                     
+                <div class="clear"></div>
+              </div>
+              <div class="fixed">
+                <div class="top-line">
+                  <div class="left title">{{cropStr(match.team1,'20')}} <span class="score">{{match.score}}</span> {{cropStr(match.team2,'20')}}</div>
+                  <div class="right code">{{match.id}}</div>                    
+                  <div class="clear"></div>
+                </div>
+              </div>
+              <div class="header-content">
+                <table class="table">
+                  <tr>
+                    <td class="match-code">{{match.id}}</td>
+                    <td class="team">
+                      <h2 class="team1 serve serv{{match.stats.ServeTeam}}">{{match.team1}}</h2>
+                      <h2>-</h2>
+                      <h2 class="team2 serve serv{{match.stats.ServeTeam}}">{{match.team2}}</h2>
+                    </td>                
+                    <td class="time-count">
+                      <span ng-show="match.mins" class="icoTimer {{icoTime(match.mins)}}">{{showTime(match.mins)}}</span>
+                      <div ng-show="showStatus(match.status,'status')"><span class="icoTimer icoAlert">{{showStatus(match.status,'status')}}</span></div>
+                      <div ng-show="showStatus(match.liveStatus,'liveStatus')"><span class="alertmsg">{{showStatus(match.liveStatus,'liveStatus')}}</span></div>
+                      <div ng-show="match.note">{{match.note}}</div>
+                    </td>
+                    <td class="score mscore"><span>Счет</span>{{getScore(match.score)}}</td>
+                    <td class="score pscore period1">{{getScore(match.score1)}}</td>
+                    <td class="score pscore period2">{{getScore(match.score2)}}</td>
+                    <td class="score pscore period3">{{getScore(match.score3)}}</td>
+                    <td class="score pscore period4">{{getScore(match.score4)}}</td>
+                    <td class="score pscore period5">{{getScore(match.score5)}}</td>
+                    <td class="score scoreg" ng-show="match.scoreg">{{match.scoreg}}</td>
+                  </tr>
+                </table>
+              </div>
+              <ng-include src="loadHBar(match.sportKind)" ng-show="showHBar(match.mins,match.stats)"></ng-include>
+              <!--ng-include src="loadHTable(match.sportKind)"></ng-include-->        
+            </div>
+              <!--MAIN BLOCK BODY-->
+            
+            <div ng-show="match.markets" class="main-block-body liveStatus_{{match.liveStatus}}" ng-controller="TablesCtrl" data-ng-init="loadTable(match.id)" id="TablesCtrl">
+              <table class="block-table large">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>П1</th>
+                    <th ng-hide="hideX(match.sportKind)">Х</th>
+                    <th>П2</th>
+                    <th ng-show="hideDC(match.sportKind)">1Х</th>
+                    <th ng-show="hideDC(match.sportKind)">12</th>
+                    <th ng-show="hideDC(match.sportKind)">Х2</th>
+                    <th>Фора 1</th>
+                    <th>КФ</th>
+                    <th>Фора 2</th>
+                    <th>КФ</th>
+                    <th>Тотал</th>
+                    <th>Больше</th>
+                    <th>Меньше</th>
+                  </tr>
+                </thead><thead>
+                </thead><tbody>
+                  <tr>
+                    <td>Матч</td>
+                    <td class="{{table_data.bc_1.dir}}"><div class="arrow">{{table_data.bc_1.value}}</div></td>
+                    <td ng-hide="hideX(match.sportKind)" class="{{table_data.bc_X.dir}}">{{table_data.bc_X.value}}</td>
+                    <td class="{{table_data.bc_2.dir}}"><div class="arrow">{{table_data.bc_2.value}}</div></td>
+                    <td class="{{table_data.bc_1X.dir}}" ng-show="hideDC(match.sportKind)"><div class="arrow">{{table_data.bc_1X.value}}</div></td>
+                    <td class="{{table_data.bc_12.dir}}" ng-show="hideDC(match.sportKind)"><div class="arrow">{{table_data.bc_12.value}}</div></td>
+                    <td class="{{table_data.bc_X2.dir}}" ng-show="hideDC(match.sportKind)"><div class="arrow">{{table_data.bc_X2.value}}</div></td>
+
+                    <td class="green-text">{{table_data.bc_f1.value}}</td>
+                    <td class="{{table_data.bc_fk1.dir}}"><div class="arrow">{{table_data.bc_fk1.value}}</div></td>
+
+                    <td class="green-text">{{table_data.bc_f2.value}}</td>
+                    <td class="{{table_data.bc_fk2.dir}}"><div class="arrow">{{table_data.bc_fk2.value}}</div></td>
+
+                    <td class="green-text">{{table_data.bc_T_V.value}}</td>
+                    <td class="{{table_data.bc_T_G.dir}}"><div class="arrow">{{table_data.bc_T_G.value}}</div></td>
+                    <td class="{{table_data.bc_T_L.dir}}"><div class="arrow">{{table_data.bc_T_L.value}}</div></td>
+                  </tr>
+
+                  <tr ng-repeat="time in table_data_time" ng-show="time">
+                    <td>{{tablename(time.tableName,match.sportKind)}}</td>
+                    
+                    <td class="{{time.bc_1.dir}}"><div class="arrow">{{time.bc_1.value}}</div></td>
+                    <td ng-hide="hideX(match.sportKind)" class="{{time.bc_X.dir}}"><div class="arrow">{{time.bc_X.value}}</div></td>
+                    <td class="{{time.bc_2.dir}}"><div class="arrow">{{time.bc_2.value}}</div></td>
+                    <td class="{{time.bc_1X.dir}}" ng-show="hideDC(match.sportKind)"><div class="arrow">{{time.bc_1X.value}}</div></td>
+                    <td class="{{time.bc_12.dir}}" ng-show="hideDC(match.sportKind)"><div class="arrow">{{time.bc_12.value}}</div></td>
+                    <td class="{{time.bc_X2.dir}}" ng-show="hideDC(match.sportKind)"><div class="arrow">{{time.bc_X2.value}}</div></td>
+
+                    <td class="green-text">{{time.bc_f1.value}}</td>
+                    <td class="{{time.bc_fk1.dir}}"><div class="arrow">{{time.bc_fk1.value}}</div></td>
+
+                    <td class="green-text">{{time.bc_f2.value}}</td>
+                    <td class="{{time.bc_fk2.dir}}"><div class="arrow">{{time.bc_fk2.value}}</div></td>
+
+                    <td class="green-text">{{time.bc_T_V.value}}</td>
+                    <td class="{{time.bc_T_G.dir}}"><div class="arrow">{{time.bc_T_G.value}}</div></td>
+                    <td class="{{time.bc_T_L.dir}}"><div class="arrow">{{time.bc_T_L.value}}</div></td> 
+                  </tr>
+
+                </tbody>
+              </table>
+              <div class="alltables four-coll">
+
+                <!--Фора-->
+                <div class="data-table isotope" ng-show="table_odds.th">
+                  <table class="block-table">
+                  <caption>{{translate(table_odds.tableName)}}</caption>
+                    <thead>
+                      <tr>
+                         <th>Фора</th>
+                         <th>1</th>
+                         <th>Фора</th>
+                         <th>2</th>
+                      </tr>
+                   </thead>
+                   <tbody class="semibold-col">
+                      <tr ng-repeat="th in table_odds.th">
+                         <td>{{th.f1.value}}</td>
+                         <td class="{{th.fk1.dir}}"><div class="arrow">{{th.fk1.value}}</div></td>
+                         <td>{{th.f2.value}}</td>
+                         <td class="{{th.fk1.dir}}"><div class="arrow">{{th.fk2.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+
+                <!--Фора по таймам-->
+                <div class="data-table isotope" ng-repeat="time in table_odds_time" ng-show="time">
+                  <table class="block-table {{time.lock}}">
+                  <caption>Фора ({{tablename(time.tableName,match.sportKind)}})</caption>
+                    <thead>
+                      <tr>
+                         <th>Фора</th>
+                         <th>1</th>
+                         <th>Фора</th>
+                         <th>2</th>
+                      </tr>
+                   </thead>
+                   <tbody class="semibold-col">
+                      <tr ng-repeat="th in time.th">
+                         <td>{{th.f1.value}}</td>
+                         <td class="{{th.fk1.dir}}"><div class="arrow">{{th.fk1.value}}</div></td>
+                         <td>{{th.f2.value}}</td>
+                         <td class="{{th.fk2.dir}}"><div class="arrow">{{th.fk2.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+
+                <!--Тотал общий-->
+                <div class="data-table isotope" ng-show="{{table_total.th}}">
+                  <table class="block-table">
+                  <caption>{{translate(table_total.tableName)}}-{{table_total.th.length}}</caption>
+                    <thead>
+                      <tr>
+                        <th>T</th>
+                        <th>Б</th>
+                        <th>М</th>
+                      </tr>
+                   </thead>
+                   <tbody class="semibold-first-col">
+                      <tr ng-repeat="th in table_total.th">
+                        <td>{{th.rate.value}}</td>
+                        <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
+                        <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+                
+                <!--Тотал индивидуальний-->
+                <div class="data-table two-tables isotope" ng-show="table_total_team1.th">
+                  <table class="block-table half" ng-show="table_total_team1.th">
+                  <caption>{{translate(table_total_team1.tableName,match.sportKind)}}</caption>
+                    <thead>
+                      <tr><th>T</th><th>Б</th><th>М</th></tr>
+                   </thead>
+                   <tbody class="semibold-first-col">
+                      <tr ng-repeat="th in table_total_team1.th">
+                        <td>{{th.rate.value}}</td>
+                        <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
+                        <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
+                      </tr>
+                   </tbody>
+                  </table>
+
+                  <table class="block-table half" ng-show="table_total_team2.th">
+                  <caption>{{translate(table_total_team2.tableName,match.sportKind)}}</caption>
+                    <thead>
+                      <tr><th>T</th><th>Б</th><th>М</th></tr>
+                   </thead>
+                   <tbody class="semibold-first-col">
+                      <tr ng-repeat="th in table_total_team2.th">
+                        <td>{{th.rate.value}}</td>
+                        <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
+                        <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+
+                <!--Тотал общий по таймам-->
+                <div class="data-table isotope" ng-repeat="time in table_total_time" ng-show="time">
+                  <table class="block-table">
+                  <caption>Тотал ({{tablename(time.tableName,match.sportKind)}})</caption>
+                    <thead>
+                      <tr>
+                        <th>T</th>
+                        <th>Б</th>
+                        <th>М</th>
+                      </tr>
+                   </thead>
+                   <tbody class="semibold-first-col">
+                      <tr ng-repeat="th in time.th">
+                        <td>{{th.rate.value}}</td>
+                        <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
+                        <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
+                      </tr>
+                   </tbody>  
+                  </table>
+                </div>
+                
+                <!--Забьют обе?-->
+                <div class="data-table isotope" ng-show="table_goal.th">
+                  <table class="block-table left-align">
+                    <caption>{{translate(table_goal.tableName)}}</caption>
+                    <tbody>
+                      <tr ng-repeat="th in table_goal.th">
+                        <td class="green-text">{{translate(th.field)}}</td>
+                        <td class="{{th.index.dir}}"><div class="arrow">{{th.index.value}}</div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!--Другие маркеты-->
+                <div class="data-table isotope" ng-repeat="table in tables" ng-show="table.th">
+                  <table class="block-table left-align">
+                    <caption>{{table.tableName}}</caption>
+                    <tbody>
+                      <tr ng-repeat="th in table.th">
+                        <td class="green-text">{{translate(th.field,match.team1,match.team2)}}</td>
+                        <td class="{{th.index.dir}}"><div class="arrow">{{th.index.value}}</div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <!--Другие маркеты 2collum-->
+                <div class="data-table isotope" ng-repeat="multitable in multiTables">
+                  <table class="block-table th-color">
+                    <caption>{{translate(multitable.tableName)}}</caption>
+                    <tbody>
+                      <tr ng-repeat="row in multitable.Rows">
+                        <td ng-show="row.col1.show">{{translate(row.col1.field)}}</td>
+                        <td ng-show="row.col1.show" class="{{row.col1.index.dir}}"><div class="arrow">{{row.col1.index.value}}</div></td>
+
+                        <td ng-show="row.col2.show">{{translate(row.col2.field)}}</td>
+                        <td ng-show="row.col2.show" class="{{row.col2.index.dir}}"><div class="arrow">{{row.col2.index.value}}</div></td>
+
+                        <td ng-show="row.col3.show">{{translate(row.col3.field)}}</td>
+                        <td ng-show="row.col3.show" class="{{row.col3.index.dir}}"><div class="arrow">{{row.col3.index.value}}</div></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+              </div><!--/two_collums-->
+
+             </div>
+
+            </div><!-- /main-block -->
+          </div><!--/EVENTS TWO COL-->
+
+        </div><!-- /wrapper -->
+      </section><!--/content-->
+
+      <div class="clear"></div>
+    </section><!--/body-wrapper-->
+
+</body>
+</html>
