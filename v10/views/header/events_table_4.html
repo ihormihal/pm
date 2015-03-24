@@ -1,0 +1,39 @@
+<div class="events-table-container" ng-show="match.stats">
+  <table class="events-table">
+    <thead>
+      <th>{{getDate(match.dateStart)}}</th>
+      <th>1</th>
+      <th>2</th>
+      <th>3</th>
+      <th>4</th>
+      <th ng-show="match.score5">5</th>
+      <th>—чет</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="team">
+          <div ng-show="serveTeam(match.stats.ServeTeam,'any')" class="serveteam {{serveTeam(match.stats.ServeTeam,'1')}}"></div>
+          {{match.team1}}
+        </td>
+        <td>{{getPoints(1, match.score1)}}</td>
+        <td>{{getPoints(1, match.score2)}}</td>
+        <td>{{getPoints(1, match.score3)}}</td>
+        <td>{{getPoints(1, match.score4)}}</td>
+        <td ng-show="match.score5">{{getPoints(1, match.score5)}}</td>
+        <td class="yellow">{{getPoints(1, match.score)}}</td>
+      </tr>
+      <tr>
+        <td class="team">
+          <div ng-show="serveTeam(match.stats.ServeTeam,'any')" class="serveteam {{serveTeam(match.stats.ServeTeam,'2')}}"></div>
+          {{match.team2}}
+        </td>
+        <td>{{getPoints(2, match.score1)}}</td>
+        <td>{{getPoints(2, match.score2)}}</td>
+        <td>{{getPoints(2, match.score3)}}</td>
+        <td>{{getPoints(2, match.score4)}}</td>
+        <td ng-show="match.score5">{{getPoints(2, match.score5)}}</td>
+        <td class="yellow">{{getPoints(2, match.score)}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

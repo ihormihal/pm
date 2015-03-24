@@ -1,0 +1,31 @@
+<!--баскетбол-->
+<div class="event-slider">
+  <div class="bar">
+    <span class="top_label title left">{{match.team1}}</span>
+    <span class="bottom_label title left">{{match.team2}}</span>
+
+    <div class="active" style="width: {{timefixBasket(match.mins,match.status)}};"></div>
+
+    <div class="new_time start" style="left: 0%">
+        <div class="separator"></div>
+    </div>
+    <div class="new_time" style="left: 25%">
+        <div class="separator"></div>
+        <div class="label">2-я</div>
+    </div>
+    <div class="new_time" style="left: 50%">
+        <div class="separator"></div>
+        <div class="label">3-я</div>
+    </div>
+    <div class="new_time" style="left: 75%">
+        <div class="separator"></div>
+        <div class="label">4-я</div>
+    </div>
+    <div class="new_time end" style="left: 100%">
+        <div class="separator"></div>
+        <div class="label">FT</div>
+    </div>
+
+    <div class="event gol team_{{goal.goalTeam}}" style="left: {{timefix(goal.goalMins,40)}};" ng-repeat="goal in match.stats.goals">{{goal.goalMins}}'</div>
+
+</div>
