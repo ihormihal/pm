@@ -28,6 +28,7 @@
 
 <body ng-app="myApp" scroll>
   <input type="hidden" id="scroll" name="scroll" value="0"/>
+  <input type="hidden" id="ready" value="1"/>
   <div id="json" style="display:none;">
     {
     "events": [
@@ -351,7 +352,7 @@
               <!--Другие маркеты-->
               <div class="data-table" ng-repeat="table in match.markets.tables" ng-show="table.th.length">
                 <table class="block-table left-align">
-                  <caption>{{table.tableName}} [{{table.tableCode}}]</caption>
+                  <caption>{{table.tableCode|translate:'markets':table.tableName}} [{{table.tableCode}}]</caption>
                   <tbody>
                     <tr ng-repeat="th in table.th">
                       <td class="green-text">{{th.field|translate:'markets'}}</td>
@@ -364,7 +365,7 @@
               <!--Другие маркеты 2collum-->
               <div class="data-table" ng-repeat="multitable in match.markets.multiTables">
                 <table class="block-table th-color">
-                  <caption>{{multitable.tableName}} [{{multitable.tableCode}}]</caption>
+                  <caption>{{multitable.tableCode|translate:'markets':multitable.tableName}} [{{multitable.tableCode}}]</caption>
                   <tbody>
                     <tr ng-repeat="row in multitable.Rows">
                       <td ng-show="row.col1.show">{{row.col1.field|translate:'markets'}}</td>
@@ -387,13 +388,6 @@
         </div>
         <!-- events end-->
 
-        <!--div class="fixed" ng-show="fixed.id">
-          <div class="top-line">
-            <div class="left title">{{fixed.team1}} <span class="score">{{fixed.score}}</span> {{fixed.team2}}</div>
-            <div class="right code">{{fixed.id}}</div>
-            <div class="clear"></div>
-          </div>
-        </div-->
         <div id="legend"></div>
 
       </div>

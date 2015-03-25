@@ -7,34 +7,35 @@
 		window.scrollBy(0,4);
 	}, 2);
 */
-var scrollTop = 0;
-var isFirst = true;
-function update(){
-	if(isFirst && window.pageYOffset !== 0){
-		window.scrollTo(0,0);
-	}else{
-		if(scrollTop >= document.body.scrollHeight){
-			scrollTop = 0;
-			window.scrollTo(0,0);
-		}else{
-			scrollTop += window.innerHeight;
-			scroll(scrollTop);
-		}
-	}
-	isFirst = false;
+
+function scroll(){
+	//перескакиваем вверх после обновления
+	window.scrollTo(0,0);
+	//обновляем легенду
+	generateLegend();
+	//деактивируем обновление
+	document.getElementById('ready').value = 0;
+
+	//скролим до дна
+	scrolling(document.body.scrollHeight - window.innerHeight,function(){
+		//активируем обновление при достижении дна
+		document.getElementById('ready').value = 1;
+	});
 }
 
-function scroll(to){
-	var time = 2000; //время скролла
+function scrolling(to,callback){
+	//var time = 5000; //время скролла одной страницы
 	var position = window.pageYOffset;
-	var step = to > position ? 4 : -4; //шаг 4px
-	var timestep = time/Math.abs((position - to)/step)
+	var step = to > position ? 2 : -2; //шаг 4px
+	//var timestep = time/Math.abs((position - to)/step);
+	var timestep = 40;
 
 	var interval = setInterval(function(){
 		position+= step;
 		window.scrollBy(0,step);
 		if(Math.abs(position - to) <= Math.abs(step/2)){
 			clearInterval(interval);
+			callback();
 		}
 	}, timestep);
 }

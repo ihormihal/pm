@@ -430,7 +430,7 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 
 ::-webkit-scrollbar {
     width: 10px;
-    /*display: none;*/
+    display: none;
 }
 ::-webkit-scrollbar-track {
     background: #000;
@@ -595,7 +595,7 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 
 /*-----SPORT KINDS END-------*/
 
-.fixed .top-line {margin-right: 35px; height: 24px; line-height: 24px; font-size: 12px; background-position: 0 -455px; padding: 4px 5px 4px 10px; border-radius: 0 0 5px 5px; box-shadow: 0 0px 10px 0 #000;}
+.fixed .top-line {margin-right: 35px; height: 24px; line-height: 24px; font-size: 12px; background-position: 0 -455px; padding: 4px 25px 4px 10px; border-radius: 0 0 5px 5px; box-shadow: 0 0px 10px 0 #000;}
 .fixed .top-line .code {background: none;}
 .fixed .top-line .score {font-size: 12px; padding: 0 5px;}
 

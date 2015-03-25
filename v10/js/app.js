@@ -1,3 +1,5 @@
+var update = function(){};
+
 var myApp = angular.module('myApp',['filters']);
 
 myApp.directive('onLastRepeat', function() {
@@ -9,42 +11,25 @@ myApp.directive('onLastRepeat', function() {
 });
 
 myApp.controller('matchesController', ['$scope', function($scope){
-	$scope.data = JSON.parse(document.getElementById('json').innerHTML);
 
-	//$scope.list = {};
 	$scope.legends = [];
-	for(var i = 0; i < $scope.data.events.length; i++){
-		$scope.legends.push({'id' : $scope.data.events[i].id});
-		//$scope.list[$scope.data.events[i].id] = {'id':$scope.data.events[i].id};
-		$scope.data.events[i].markets = dataConvert($scope.data.events[i].id, $scope.data.events[i].markets);
-	}
-
-	$scope.positions = [];
-
-	/*$scope.pushPosition = function(id){
-		var node = document.getElementById(id);
-		if(node !== null){
-			var position = node.getBoundingClientRect();
-			$scope.positions.push({id : id, top : position.top, bottom : position.bottom});
+	$scope.load = function(){
+		$scope.data = JSON.parse(document.getElementById('json').innerHTML);
+		for(var i = 0; i < $scope.data.events.length; i++){
+			$scope.legends.push({'id' : $scope.data.events[i].id});
+			$scope.data.events[i].markets = dataConvert($scope.data.events[i].id, $scope.data.events[i].markets);
 		}
-	};*/
-	//console.log($scope.positions);
+	};
 
-/*
-	$scope.$on('onRepeatLast', function(scope, element, attrs){
-		var documentHeight = document.body.scrollHeight;
-		var windowHeight = window.innerHeight;
+	$scope.load();
 
-		var legends = document.querySelectorAll("#legend > .item");
-		//console.log(legends);
-
-		for (var i = 0; i < legends.length; i++) {
-			var id = legends[i].text;
-			var block = document.getElementById(legends[i].text).getBoundingClientRect();
-			legends[i].style.top = Math.round((block.top/documentHeight)*windowHeight)+'px';
+	update = function(){
+		if(document.getElementById('ready').value == 1){
+			$scope.load();
+			$scope.$apply();
+			scroll();
 		}
-  });
-*/
+	};
 
 	//Хелперы
 
@@ -166,35 +151,6 @@ myApp.controller('matchesController', ['$scope', function($scope){
 
 }]);
 
-/*
-myApp.controller('legendController', ['$scope', function($scope){
-	$scope.fixed = {};
-	var legends = {};
-	var top = 0;
-	var delta_h = Math.round(window.innerHeight/$scope.legends.length);
-	for(var i = 0; i < $scope.legends.length; i++){
-		legends[$scope.legends[i].id] = {'id':$scope.legends[i].id, 'style': {'top':top+'px'}, 'active': ''};
-		top+=delta_h;
-	}
-	$scope.legends = legends;
-
-	window.onscroll = function(){
-
-		var items = getVisible();
-		for(var i in legends){
-			legends[i].active = '';
-		}
-		for(var i = 0; i < items.visible.length; i++){
-			$scope.legends[items.visible[i]].active = 'active';
-		}
-		$scope.fixed = {id:items.top, team1:'team1', team2:'team2', score:'score'};
-		$scope.$apply();
-
-	}
-
-}]);
-*/
-
 //truncate filter
 angular.module('filters', [])
 .filter('truncate', function () {
@@ -213,16 +169,20 @@ angular.module('filters', [])
 	};
 })
 .filter('translate', function () {
-	return function(text, namespace){
+	return function(text, namespace, def){
 		if(namespace === undefined){
 			namespace = "main";
 		}
-		//return namespace;
 
 		if(text in translate[namespace]){
 			return translate[namespace][text];
 		}else{
-			return text;
+			if(def === undefined){
+				return text;
+			}else{
+				return def;
+			}
+			
 		}
 	}
 });

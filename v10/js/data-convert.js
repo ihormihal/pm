@@ -107,8 +107,9 @@ function dataConvert (id, markets){
 
     //Проверяем, совпадают ли исходы
     //Существует матч в предыдущем наборе
-    if(prevData.hasOwnProperty(id)){
+    if(id in prevData){
       //существует ли маркет с таким же индексом в предыдущем наборе и есть ли в нем данные
+      //console.log(prevData[id].markets);
       if(prevData[id].markets[i] && prevData[id].markets[i].p[p]){
         //совпаают ли названия сравниваемых маркетов
         if(markets[i].p[p].c == prevData[id].markets[i].p[p].c){
@@ -386,7 +387,7 @@ function dataConvert (id, markets){
         match.table_data_time[period-1] = match['table_data_time'+period];
         //это под вопросом
       }
-
+/*
       else if(market_name.indexOf('bcg_P12_T1_Goal_YN') !== -1){
         //Забьет 1-я в каждом тайме
       }
@@ -406,7 +407,7 @@ function dataConvert (id, markets){
       else if(market_name.indexOf('bcg_AwayOff') !== -1){
         //Удаление
       }
-      
+*/      
       else{
         //другие
         //Тотал без указания периода
@@ -424,6 +425,6 @@ function dataConvert (id, markets){
   /********************************/
   /****** main iteration end ******/
   /********************************/
-  prevData[id] = match;
+  prevData[id] = {markets : markets};
   return match;
 }
