@@ -1,13 +1,3 @@
-/*
-	var documentHeight = document.body.scrollHeight;
-	var windowHeight = window.innerHeight;
-	var pages = Math.floor(documentHeight/windowHeight);
-	var scrollTop = 0;
-	setInterval(function(){
-		window.scrollBy(0,4);
-	}, 2);
-*/
-
 function scroll(){
 	//перескакиваем вверх после обновления
 	window.scrollTo(0,0);
@@ -40,33 +30,18 @@ function scrolling(to,callback){
 	}, timestep);
 }
 
-var legend_nodes = [];
-var fixed_nodes = [];
-var heights = [];
+var heights = {};
 
 window.onload = function(){
     generateLegend();
+    setInterval(getVisible, 500);
 };
 window.onresize = function(){
     generateLegend();
 };
 
 window.onscroll = function(){
-	var items = getVisible();
-	//Подсвечиваем легенду
-	for(var i = 0; i < legend_nodes.length; i++){
-		legend_nodes[i].setAttribute('class','item');
-		if(items.visible.indexOf(legend_nodes[i].text) !== -1){
-			legend_nodes[i].setAttribute('class','item active');
-		}
-	}
-	//Показываем-скрываем верхнюю строку
-	for(var i = 0; i < fixed_nodes.length; i++){
-		fixed_nodes[i].style.display = "none";
-		if(fixed_nodes[i].getAttribute('data-id') == items.fixed){
-			fixed_nodes[i].style.display = "block";
-		}
-	}
+	
 };
 
 function generateLegend(){
@@ -78,52 +53,45 @@ function generateLegend(){
     	var id = blocks[i].getAttribute('id');
     	var position = blocks[i].getBoundingClientRect();
 
-    	legends += '<a href="#'+id+'" class="item">'+id+'</a>';
-
-    	heights.push({
-    		'id' : id, 
+    	legends += '<a href="#'+id+'" id="item-'+id+'">'+id+'</a>';
+    	heights[id] = {
     		'top' : position.top + offset, 
     		'bottom' : position.bottom + offset
-    	});
+    	};
     }
     document.getElementById("legend").innerHTML = legends;
-
-    legend_nodes = document.querySelectorAll("#legend > .item");
-    fixed_nodes = document.querySelectorAll("#events .fixed");
 }
 
 //Получаем список видимых матчей
 function getVisible(){
-	var visible = {};
-	var out = {'visible':[],'fixed':''};
 	var interval = [window.pageYOffset, window.pageYOffset+window.innerHeight];
-	for(var i = 0; i < heights.length; i++){
+
+	for(var i in heights){
+		document.getElementById('item-'+i).setAttribute('class', '');
+		document.getElementById('fixed-'+i).style.display = "none";
 		//целиком поместился
 		if(heights[i].top > interval[0] && heights[i].bottom < interval[1]){
-			visible[heights[i].id] = true;
+			document.getElementById('item-'+i).setAttribute('class', 'active');
 		}
 		//верх поместился, низ не поместился
 		if(heights[i].top > interval[0] && heights[i].top < interval[1]){
-			visible[heights[i].id] = true;
+			document.getElementById('item-'+i).setAttribute('class', 'active');
 		}
 		//верх не поместился, низ поместился
 		if(heights[i].bottom > interval[0] && heights[i].bottom < interval[1]){
-			visible[heights[i].id] = true;
+			document.getElementById('item-'+i).setAttribute('class', 'active');
 			if((interval[0] - heights[i].top) > 60){
-				out.fixed = heights[i].id;
+				document.getElementById('fixed-'+i).style.display = "block";
 			}
 		}
 		//верх и низ не поместились
 		if(heights[i].top < interval[0] && heights[i].bottom > interval[1]){
-			visible[heights[i].id] = true;
+			document.getElementById('item-'+i).setAttribute('class', 'active');
 			if((interval[0] - heights[i].top) > 60){
-				out.fixed = heights[i].id;
+				document.getElementById('fixed-'+i).style.display = "block";
 			}
 			
 		}
+
 	}
-	for(var id in visible){
-		out.visible.push(id);
-	}
-	return out;
 }
