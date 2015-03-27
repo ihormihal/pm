@@ -74,15 +74,11 @@ function generateLegend(){
     var blocks = document.querySelectorAll('#events .main-block');
 
     var legends = '';
-    var delta_h = Math.round(window.innerHeight/blocks.length);
-    var item_top = 0;
-
     for(var i = 0; i < blocks.length; i++){
     	var id = blocks[i].getAttribute('id');
     	var position = blocks[i].getBoundingClientRect();
 
-    	legends += '<a href="#'+id+'" class="item" style="top:'+item_top+'px;">'+id+'</a>';
-    	item_top+=delta_h;
+    	legends += '<a href="#'+id+'" class="item">'+id+'</a>';
 
     	heights.push({
     		'id' : id, 

@@ -5,7 +5,7 @@
 html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td { margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; vertical-align: baseline; background: transparent; } body { line-height: 1; } ol, ul { list-style: none; } blockquote, q { quotes: none; } blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; } :focus { outline: none; } ins { text-decoration: none; } del { text-decoration: line-through; } table { border-collapse: collapse; border-spacing: 0; } a { text-decoration: none; }
 html { }
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, section, summary { display: block; }
-body { height: 100%; font: 12px/1 Arial, Tahoma, Verdana, sans-serif; background: #212121;  color: #212121;}
+body { height: 100%; font: 12px/1 Arial, Tahoma, Verdana, sans-serif; background: #444;  color: #212121;}
 #body { height: auto; min-height: 100%; position: relative;}
 
 /*-----------------------------------------
@@ -25,7 +25,7 @@ body { height: 100%; font: 12px/1 Arial, Tahoma, Verdana, sans-serif; background
 	opacity: 0;
 }
 
-.fixed {position: fixed; top: 0; width: 99%; z-index: 9200; display: none;}
+.fixed {position: fixed; top: -1px; width: 99%; z-index: 9200; display: none;}
 
 .navPage {z-index: 2000; position: fixed; bottom: 0; left: 0; background: rgba(0,0,0,0.5); font-size: 14px; padding: 10px; color: #fff;}
 
@@ -67,12 +67,19 @@ header .wrapper { width: 98%; margin: 0 auto;  }
 	border-right: 1px solid #7F7E7E;
 }
 
-#events {position: relative; margin-right: 35px;}
+#events {position: relative; margin-right: 40px;}
 #canvas {position: fixed; right: 0; top: 0; z-index: 9500;}
 
-#legend {position: fixed; right: 0; top: 0; height: 100%; width: 35px; text-align: center; z-index: 9500; background: rgba(0,0,0,0.5);}
-#legend .item {font-size: 11px; font-weight: bold; color: #fff; position: absolute; left: 0; text-decoration: none; text-align: center; width: 100%; padding: 3px 0; z-index: 1000;}
-#legend .item.active {background: #f4a92b; z-index: 2000; color: #000;}
+.legend {position: fixed; right: 0; top: 0; height: 100%; width: 40px; text-align: center; z-index: 9500;}
+#legend {position: relative; padding-right: 6px; padding-top: 10px;}
+#legend .item {
+	display: block; padding-right: 4px; font-size: 11px; font-weight: bold; color: #888; 
+	text-decoration: none; text-align: center; width: 100%; height: 17px; line-height: 17px;
+	background: url(../img/ico-legend.gif) no-repeat right;
+}
+#legend .item.active {color: #fff;}
+#legend .item:first-child {background-image: url(../img/ico-legend-top.gif);}
+#legend .item:last-child {background-image: url(../img/ico-legend-bottom.gif);}
 
 .icoFootball { display: inline-block; width: 14px; height: 14px; background: url(../img/icoFootball.png) 0 0 no-repeat; margin: 0 5px; }
 
@@ -455,7 +462,7 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 .skind_2 .top-line .code {background: #b9731a;}
 .skind_2 .event-slider .bar .active {background-position: 0 0;}
 
-.skind_2 .main-block-body {background: #725126;}
+/*.skind_2 .main-block-body {background: #725126;}*/
 
 /*.skind_2 .block-table caption {background: #b9731a;}*/
 
@@ -491,7 +498,7 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 .skind_8 .serve {background: url(../img/sicons/volleyball.png) 0 0 no-repeat;}
 
 /*.skind_8 .block-table caption {background: #E98C60;}*/
-.skind_8 .main-block-body {background: #613F21;}
+/*.skind_8 .main-block-body {background: #613F21;}*/
 
 /*Гандбол*/
 .skind_9 .sport-kind-icon {background: url(../img/sicons/handball_big.png) 0 0 no-repeat;}
@@ -503,7 +510,7 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 .skind_9 .serve {background: url(../img/sicons/handball.png) 0 0 no-repeat;}
 
 /*.skind_9 .block-table caption {background: #80C1D3;}*/
-.skind_9 .main-block-body {background: #505F66;}
+/*.skind_9 .main-block-body {background: #505F66;}*/
 
 /*Гольф*/
 .skind_10 .sport-kind-icon {background: url(../img/sicons/golf_big.png) 0 0 no-repeat;}
@@ -521,7 +528,7 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 .skind_18 .event-slider .bar .active {background-position: 0 -22px;}
 .skind_18 .serve {background: url(../img/sicons/tennis.png) 0 0 no-repeat;}
 /*.skind_18 .block-table caption {background: #BCC03C;}*/
-.skind_18 .main-block-body {background: #68624B;}
+/*.skind_18 .main-block-body {background: #68624B;}*/
 
 /*Мотоспорт*/
 .skind_20 .sport-kind-icon {background: url(../img/sicons/motor_sport_big.png) 0 0 no-repeat;}
@@ -539,7 +546,7 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 .skind_21 .event-slider .bar .active {background-position: 0 -22px;}
 
 /*.skind_21 .block-table caption {background: #5ACA78;}*/
-.skind_21 .main-block-body {background: #3A4B34;}
+/*.skind_21 .main-block-body {background: #3A4B34;}*/
 
 /*Футзал*/
 .skind_22 .sport-kind-icon {background: url(../img/sicons/footsal_big.png) 0 0 no-repeat;}
@@ -557,7 +564,7 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 .skind_23 .top-line .code {background: #007a7e;}
 .skind_23 .event-slider .bar .active {background-position: 0 -33px;}
 
-.skind_23 .main-block-body {background: #5B7377;}
+/*.skind_23 .main-block-body {background: #5B7377;}*/
 
 /*Бадминтон*/
 /*.skind_28 .header-content {background: -webkit-linear-gradient(bottom, #ffffff 0%, #ffffff 80%, #233aaf 100%);}*/
@@ -576,7 +583,7 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 .skind_29 .event-slider .bar .active {background-position: 0 -22px;}
 
 /*.skind_29 .block-table caption {background: #8FB2FC;}*/
-.skind_29 .main-block-body {background: #4C525E;}
+/*.skind_29 .main-block-body {background: #4C525E;}*/
 
 /*Пляжный футбол*/
 .skind_30 .sport-kind-icon {background: url(../img/sicons/beach_football_big.png) 0 0 no-repeat;}
@@ -595,7 +602,7 @@ td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 
 /*-----SPORT KINDS END-------*/
 
-.fixed .top-line {margin-right: 35px; height: 24px; line-height: 24px; font-size: 12px; background-position: 0 -455px; padding: 4px 25px 4px 10px; border-radius: 0 0 5px 5px; box-shadow: 0 0px 10px 0 #000;}
+.fixed .top-line {margin-right: 40px; height: 24px; line-height: 24px; font-size: 12px; background-position: 0 -455px; padding: 4px 25px 4px 10px; border-radius: 0 0 5px 5px; /*box-shadow: 0 0px 10px 0 #000;*/}
 .fixed .top-line .code {background: none;}
 .fixed .top-line .score {font-size: 12px; padding: 0 5px;}
 
