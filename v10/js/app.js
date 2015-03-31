@@ -24,7 +24,7 @@ myApp.controller('matchesController', ['$scope', function($scope){
 	$scope.load();
 
 	update = function(){
-		if(document.getElementById('scroll').value == 1){
+		if(document.getElementById('scroll').value == 0){
 			$scope.load();
 			$scope.$apply();
 			scroll();

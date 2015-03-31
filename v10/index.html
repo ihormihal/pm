@@ -14,7 +14,7 @@
 
 
 <body ng-app="myApp" scroll>
-  <input type="hidden" id="scroll" name="scroll" value="1"/>
+  <input type="hidden" id="scroll" name="scroll" value="0"/>
   <div id="json" style="display:none;">
     {
     "events": [
@@ -384,8 +384,8 @@
         <div class="item-control">
           <label for="scroll-step">Шаг скролла</label>
           <select id="scroll-step" onchange="newScrollParam()">
-            <option value="1">1 px</option>
-            <option value="2" selected>2 px</option>
+            <option value="1" selected>1 px</option>
+            <option value="2">2 px</option>
             <option value="3">3 px</option>
             <option value="4">4 px</option>
             <option value="5">5 px</option>
@@ -408,7 +408,7 @@
         </div>
 
       </div>
-        
+
     </div>
   </section>
 </body>

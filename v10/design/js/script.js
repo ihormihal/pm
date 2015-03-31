@@ -1,7 +1,7 @@
 var Scrolling = function(){
 
 	this.state = 'pause';
-	this._step = 2;
+	this._step = 1;
 	this._interval = 40;
 	this.position = window.pageYOffset;
 	this.to = window.innerHeight;
@@ -19,11 +19,11 @@ var Scrolling = function(){
 			that.position+= that._step;
 
 			//если достигли точки назначения с точностью в половину интервала
-			if(Math.abs(that.position - that.to) <= Math.abs(that._step/2)){
+			if(Math.abs(window.pageYOffset - document.body.scrollHeight + window.innerHeight) <= Math.abs(that._step)){
 				that.pause();
 				that.state = 'end';
 				//активируем обновление
-				document.getElementById('scroll').value = 1;
+				document.getElementById('scroll').value = 0;
 			}
 		}, that._interval);
 	};
@@ -71,7 +71,7 @@ function scroll(){
 	//генерируем легенду
 	setTimeout(generateLegend, 2000);
 	//деактивируем обновление
-	document.getElementById('scroll').value = 0;
+	document.getElementById('scroll').value = 1;
 	//скролим
 	pageScroll.play();
 }
