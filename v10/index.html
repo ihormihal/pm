@@ -10,25 +10,11 @@
     <script src="js/data-convert.js"></script>
     <script src="js/app.js"></script>
     <script src="design/js/script.js"></script>
-    <style>
-   .block-table.large th {
-      border-top: 1px solid #FFD07C;
-      border-bottom: 1px solid #996600;
-      background: #F2B05C;
-      background: -webkit-linear-gradient(top, #ecb432 0%, #F2B05C 100%);
-      color: #333;
-   }
-   .block-table caption {
-    background: #F2B05C;
-    background: -webkit-linear-gradient(top, #ecb432 0%, #F2B05C 100%);
-   }
-   </style>
 </head>
 
 
 <body ng-app="myApp" scroll>
-  <input type="hidden" id="scroll" name="scroll" value="0"/>
-  <input type="hidden" id="ready" value="1"/>
+  <input type="hidden" id="scroll" name="scroll" value="1"/>
   <div id="json" style="display:none;">
     {
     "events": [
@@ -387,10 +373,42 @@
 
         </div>
         <!-- events end-->
+      </div>
 
-        <div class="legend"><div id="legend"></div></div>
+      <div class="legend"><div id="legend"></div></div>
+      <div class="panel-control">
+
+        <div class="item-control scroll-control">
+          <div id="playpause" class="play" onclick="playpause()"></div>
+        </div>
+        <div class="item-control">
+          <label for="scroll-step">Шаг скролла</label>
+          <select id="scroll-step" onchange="newScrollParam()">
+            <option value="1">1 px</option>
+            <option value="2" selected>2 px</option>
+            <option value="3">3 px</option>
+            <option value="4">4 px</option>
+            <option value="5">5 px</option>
+            <option value="10">10 px</option>
+          </select>
+        </div>
+        <div class="item-control">
+          <label for="scroll-interval">Интервал скролла</label>
+          <select id="scroll-interval" onchange="newScrollParam()">
+            <option value="3">5 ms</option>
+            <option value="5">5 ms</option>
+            <option value="7">7 ms</option>
+            <option value="10">10 ms</option>
+            <option value="20">20 ms</option>
+            <option value="30">30 ms</option>
+            <option value="40" selected>40 ms</option>
+            <option value="50">50 ms</option>
+            <option value="100">100 ms</option>
+          </select>
+        </div>
 
       </div>
+        
     </div>
   </section>
 </body>

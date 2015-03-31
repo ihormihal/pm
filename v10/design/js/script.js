@@ -1,48 +1,81 @@
-function scroll(){
-	//перескакиваем вверх после обновления
-	window.scrollTo(0,0);
-	//обновляем легенду
-	generateLegend();
-	//деактивируем обновление
-	document.getElementById('ready').value = 0;
+var Scrolling = function(){
 
-	//скролим до дна
-	scrolling(document.body.scrollHeight - window.innerHeight,function(){
-		//активируем обновление при достижении дна
-		document.getElementById('ready').value = 1;
-	});
-}
+	this.state = 'pause';
+	this._step = 2;
+	this._interval = 40;
+	this.position = window.pageYOffset;
+	this.to = window.innerHeight;
 
-function scrolling(to,callback){
-	//var time = 5000; //время скролла одной страницы
-	var position = window.pageYOffset;
-	var step = to > position ? 2 : -2; //шаг 4px
-	//var timestep = time/Math.abs((position - to)/step);
-	var timestep = 40;
+	this.play = function(){
+		this.position = window.pageYOffset;
+		this.to = document.body.scrollHeight - window.innerHeight;
 
-	var interval = setInterval(function(){
-		position+= step;
-		window.scrollBy(0,step);
-		if(Math.abs(position - to) <= Math.abs(step/2)){
-			clearInterval(interval);
-			callback();
-		}
-	}, timestep);
-}
+		this.state = 'play';
+		document.getElementById('playpause').setAttribute('class','pause');
 
-var heights = {};
+		var that = this;
+		this.scrollinterval = setInterval(function(){
+			window.scrollBy(0,that._step);
+			that.position+= that._step;
+
+			//если достигли точки назначения с точностью в половину интервала
+			if(Math.abs(that.position - that.to) <= Math.abs(that._step/2)){
+				that.pause();
+				that.state = 'end';
+				//активируем обновление
+				document.getElementById('scroll').value = 1;
+			}
+		}, that._interval);
+	};
+
+	this.pause = function(){
+		clearInterval(this.scrollinterval);
+		this.state = 'pause';
+		document.getElementById('playpause').setAttribute('class','play');
+	};
+};
+
+//Добавляем сеттеры
+Scrolling.prototype = {
+    set step(val){
+    	this.pause();
+        //this._step = this.to > this.position ? val : -val;
+        this._step = val;
+        this.play();
+    },
+    set interval(val){
+        this.pause();
+        this._interval = val;
+        this.play();
+    }
+};
+
+var pageScroll = new Scrolling();
+
 
 window.onload = function(){
     generateLegend();
-    setInterval(getVisible, 500);
+    setInterval(getVisible, 500); //обновляем легенду каждые 500ms
+    pageScroll.to = document.body.scrollHeight - window.innerHeight;
 };
 window.onresize = function(){
     generateLegend();
 };
 
-window.onscroll = function(){
-	
-};
+var heights = {};
+
+//вызывается из app.js
+function scroll(){
+	//перескакиваем вверх после обновления
+	window.scrollTo(0,0);
+	//генерируем легенду
+	setTimeout(generateLegend, 2000);
+	//деактивируем обновление
+	document.getElementById('scroll').value = 0;
+	//скролим
+	pageScroll.play();
+}
+
 
 function generateLegend(){
 	var offset = window.pageYOffset;
@@ -93,5 +126,21 @@ function getVisible(){
 			
 		}
 
+	}
+}
+
+function newScrollParam(){
+	pageScroll.step = document.getElementById('scroll-step').value;
+	pageScroll.interval = document.getElementById('scroll-interval').value;
+}
+
+function playpause(){
+	if(pageScroll.state == 'play'){
+		pageScroll.pause();
+	}else if(pageScroll.state == 'pause'){
+		pageScroll.play();
+	}else{
+		//насильно обновляем
+		update();
 	}
 }
