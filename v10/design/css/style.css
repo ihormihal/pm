@@ -367,7 +367,7 @@ table.lock {opacity: 0.35;}
 
 .semibold-row > td, td.green-text,
 .semibold-col > tr td:nth-child(odd),
-.semibold-first-col > tr td:first-child{color: #0F5C00;}
+/*.semibold-first-col > tr td:first-child{color: #0F5C00;}*/
 
 td.green-text:first-letter {text-transform: uppercase;}
 
