@@ -269,15 +269,15 @@ table.lock {opacity: 0.35;}
 .block-table.bars .red {background:#bc2424;background: -webkit-linear-gradient(right, #da2e2e 0%, #B82323 100%);width: 25%;}
 
 .main-block-body {width: 99%; background: #7f7e7e; border-radius: 3px; padding: 5px 0.5%; position: relative;}
-.main-block-body .lock {
+
+.main-block-body .lock {display: none;}
+.main-block-body .lock.liveStatus_2 {
 	display: block;
 	border-radius: 2px;
 	position: absolute; top: 0; left: 0; z-index: 100; 
 	height: 100%; width: 100%; 
-	background: rgba(0,0,0,0.6) url(../img/ico-lock.png) no-repeat center center;
-	opacity: 0;
+	background: rgba(0,0,0,0.5) url(../img/ico-lock.png) no-repeat center center;
 }
-.main-block-body.liveStatus_2 {display: none !important; opacity: 0;}
 
 .table { width: 100%; }
 .table td { text-align: center; vertical-align: middle; color: #212121; }
@@ -385,6 +385,10 @@ td.up {color: #fff;}
 td.down {color: #fff;}
 td.up .arrow {background: url(../img/up-bg-arrow.png) no-repeat;}
 td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
+
+/**** DISABLE ARROWS ****/
+td.up .arrow {background: none; color: #0E9000;}
+td.down .arrow {background: none; color: #CF0000;}
 
 /* different width's */
 

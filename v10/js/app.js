@@ -27,6 +27,7 @@ myApp.controller('matchesController', ['$scope', function($scope){
 		if(document.getElementById('scroll').value == 0){
 			$scope.load();
 			$scope.$apply();
+			document.getElementById('overlay_loading').remove();
 			scroll();
 		}
 	};

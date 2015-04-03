@@ -45,7 +45,7 @@
     ]
   }
   </div>
-  <!--div id="overlay_loading"></div-->
+  <div id="overlay_loading"></div>
   <section id="content">
     <div id="overlay"></div>
     <div class="wrapper" ng-controller="matchesController">
@@ -94,8 +94,8 @@
             <ng-include src="loadHBar(match.sportKind)" ng-show="showHBar(match.mins,match.stats)"></ng-include>
           </div>          
           <!-- markets section-->
-          <div ng-show="1" class="main-block-body liveStatus_{{match.liveStatus}}">
-
+          <div ng-show="1" class="main-block-body">
+            <div class="lock liveStatus_{{match.liveStatus}}"></div>
             <table class="block-table large">
               <thead>
                 <tr>
@@ -338,7 +338,7 @@
               <!--Другие маркеты-->
               <div class="data-table" ng-repeat="table in match.markets.tables" ng-show="table.th.length">
                 <table class="block-table left-align">
-                  <caption>{{table.tableCode|translate:'markets':table.tableName}} [{{table.tableCode}}]</caption>
+                  <caption>{{table.tableCode|translate:'markets':table.tableName}}</caption>
                   <tbody>
                     <tr ng-repeat="th in table.th">
                       <td class="green-text">{{th.field|translate:'markets'}}</td>
@@ -351,7 +351,7 @@
               <!--Другие маркеты 2collum-->
               <div class="data-table" ng-repeat="multitable in match.markets.multiTables">
                 <table class="block-table th-color">
-                  <caption>{{multitable.tableCode|translate:'markets':multitable.tableName}} [{{multitable.tableCode}}]</caption>
+                  <caption>{{multitable.tableCode|translate:'markets':multitable.tableName}}</caption>
                   <tbody>
                     <tr ng-repeat="row in multitable.Rows">
                       <td ng-show="row.col1.show">{{row.col1.field|translate:'markets'}}</td>
