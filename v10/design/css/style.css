@@ -387,8 +387,23 @@ td.up .arrow {background: url(../img/up-bg-arrow.png) no-repeat;}
 td.down .arrow {background: url(../img/down-bg-arrow.png) no-repeat;}
 
 /**** DISABLE ARROWS ****/
-td.up .arrow {background: none; color: #0E9000;}
-td.down .arrow {background: none; color: #CF0000;}
+td.up .arrow {
+	background: none;
+	color: #008000;
+	-webkit-animation: blink1 1s linear infinite;
+}
+td.down .arrow {
+	background: none;
+	color: #900000;
+	-webkit-animation: blink2 1s linear infinite;
+}
+
+@-webkit-keyframes blink1 {
+  100% { color: #00ee00; }
+}
+@-webkit-keyframes blink2 {
+  100% { color: #ff0000; }
+}
 
 /* different width's */
 
