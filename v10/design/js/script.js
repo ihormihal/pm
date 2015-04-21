@@ -1,3 +1,4 @@
+var getVisible_interval;
 var Scrolling = function(){
 
 	this.state = 'pause';
@@ -26,9 +27,11 @@ var Scrolling = function(){
 				document.getElementById('scroll').value = 0;
 			}
 		}, that._interval);
+		setInterval(getVisible, 500); //обновляем легенду каждые 500ms
 	};
 
 	this.pause = function(){
+		clearInterval(getVisible_interval);
 		clearInterval(this.scrollinterval);
 		this.state = 'pause';
 		document.getElementById('playpause').setAttribute('class','play');
@@ -55,7 +58,6 @@ var pageScroll = new Scrolling();
 
 window.onload = function(){
     generateLegend();
-    setInterval(getVisible, 500); //обновляем легенду каждые 500ms
     pageScroll.to = document.body.scrollHeight - window.innerHeight;
 };
 window.onresize = function(){
@@ -69,7 +71,7 @@ function scroll(){
 	//перескакиваем вверх после обновления
 	window.scrollTo(0,0);
 	//генерируем легенду
-	setTimeout(generateLegend, 2000);
+	setTimeout(generateLegend, 5000);
 	//деактивируем обновление
 	document.getElementById('scroll').value = 1;
 	//скролим
@@ -78,6 +80,7 @@ function scroll(){
 
 
 function generateLegend(){
+	heights = {};
 	var offset = window.pageYOffset;
     var blocks = document.querySelectorAll('#events .main-block');
 
@@ -86,7 +89,7 @@ function generateLegend(){
     	var id = blocks[i].getAttribute('id');
     	var position = blocks[i].getBoundingClientRect();
 
-    	legends += '<a href="#'+id+'" id="item-'+id+'">'+id+'</a>';
+    	legends += '<a href="#'+id+'" id="item-'+id+'" class="">'+id+'</a>';
     	heights[id] = {
     		'top' : position.top + offset, 
     		'bottom' : position.bottom + offset
@@ -100,8 +103,12 @@ function getVisible(){
 	var interval = [window.pageYOffset, window.pageYOffset+window.innerHeight];
 
 	for(var i in heights){
-		document.getElementById('item-'+i).setAttribute('class', '');
-		document.getElementById('fixed-'+i).style.display = "none";
+		try{
+			document.getElementById('item-'+i).setAttribute('class', '');
+			document.getElementById('fixed-'+i).style.display = "none";
+		}catch(error){
+			console.log('Waiting...');
+		}
 		//целиком поместился
 		if(heights[i].top > interval[0] && heights[i].bottom < interval[1]){
 			document.getElementById('item-'+i).setAttribute('class', 'active');
