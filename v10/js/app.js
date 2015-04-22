@@ -14,10 +14,15 @@ myApp.controller('matchesController', ['$scope', function($scope){
 
 	$scope.legends = [];
 	$scope.load = function(){
-		$scope.data = JSON.parse(document.getElementById('json').innerHTML);
-		for(var i = 0; i < $scope.data.events.length; i++){
-			$scope.legends.push({'id' : $scope.data.events[i].id});
-			$scope.data.events[i].markets = dataConvert($scope.data.events[i].id, $scope.data.events[i].markets);
+		if(document.getElementById('json').innerHTML.indexOf('events') !== -1){
+			document.getElementById('intro').style.display = "none";
+			$scope.data = JSON.parse(document.getElementById('json').innerHTML);
+			for(var i = 0; i < $scope.data.events.length; i++){
+				$scope.legends.push({'id' : $scope.data.events[i].id});
+				$scope.data.events[i].markets = dataConvert($scope.data.events[i].id, $scope.data.events[i].markets);
+			}
+		}else{
+			document.getElementById('intro').style.display = "block";
 		}
 	};
 

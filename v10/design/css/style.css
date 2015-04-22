@@ -104,6 +104,17 @@ header .wrapper { width: 98%; margin: 0 auto;  }
 
 #content { clear: both; width: 100%;}
 #overlay_loading {display: block; z-index: 8900; position: fixed; height: 100%; width: 100%; background: rgba(0,0,0,1) url(../img/page-loader.gif) center center no-repeat; top: 0; left: 0;}
+#intro {
+	display: block;
+	z-index: 8800;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	padding: 180px 0;
+	text-shadow: 1px 1px 4px #000;
+}
+#intro .line {font-size: 60px; text-transform: uppercase; text-align: center; padding: 40px 0; color: #fff;}
+
 #content .wrapper { min-width: 768px; width: 99%; height: 100%; position: relative; margin: 0 auto;}
 .sport-kind-icon {
 	display: inline-block; width: 25px; height: 25px; 

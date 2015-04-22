@@ -16,36 +16,13 @@
 <body ng-app="myApp" scroll>
   <input type="hidden" id="scroll" name="scroll" value="0"/>
   <div id="json" style="display:none;">
-    {
-    "events": [
-    {
-        "id": "0000",
-        "team1": "TEST",
-        "team2": "TEST",
-        "dateStart": "20140529T1130",
-        "liveStatus": "1",
-        "sportKind": "30",
-        "sportName": "TEST",
-        "razdName": "TEST. TEST. TEST",
-        "status": "P1",
-        "score": "0-0",
-        "score1": "",
-        "score2": "",
-        "score3": "",
-        "score4": "",
-        "score5": "",
-        "scoreg": "",
-        "mins": "45",
-        "stats": {
-          "ServeTeam": "0"
-          },
-        "markets": [
-        ]
-      }
-    ]
-  }
+    
   </div>
   <div id="overlay_loading"></div>
+  <div id="intro">
+    <div class="line">Soon in Live</div>
+    <div class="line">Скоро в Лайв</div>
+  </div>
   <section id="content">
     <div id="overlay"></div>
     <div class="wrapper" ng-controller="matchesController">
