@@ -110,10 +110,20 @@ header .wrapper { width: 98%; margin: 0 auto;  }
 	position: fixed;
 	height: 100%;
 	width: 100%;
-	padding: 180px 0;
-	text-shadow: 1px 1px 4px #000;
 }
-#intro .line {font-size: 60px; text-transform: uppercase; text-align: center; padding: 40px 0; color: #fff;}
+#intro .line {height: 25%; }
+#intro .line:before {
+	content: ''; 
+	display: inline-block; 
+	height: 100%; 
+	vertical-align: middle;
+}
+#intro .line .text {
+	display: block;
+	display: inline-block; 
+	vertical-align: middle;
+	text-shadow: 1px 1px 4px #000; font-size: 60px; text-transform: uppercase; text-align: center; color: #fff; width: 100%;
+}
 
 #content .wrapper { min-width: 768px; width: 99%; height: 100%; position: relative; margin: 0 auto;}
 .sport-kind-icon {
