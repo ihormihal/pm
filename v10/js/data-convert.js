@@ -80,7 +80,7 @@ function isInteger(num) {
 /*****************************************/
 /*****************************************/
 
-function dataConvert (id, markets){
+function dataConvert (id, markets, option){
 
   //Форматируем ячейки значений форы
   function getOddRate (i,p) {
@@ -238,6 +238,9 @@ function dataConvert (id, markets){
     }
 
     else if(market_name.indexOf('bcg_Odds_') !== -1){
+      if(option == 'short'){
+        continue;
+      }
       //Форы дополнительные
       match.table_odds.th.push({f1 : getOddRate(i,1), fk1 : getValue(i,0), f2 : getOddRate(i,3), fk2 : getValue(i,2)});
     }
@@ -293,6 +296,11 @@ function dataConvert (id, markets){
         match.table_data.bc_T_L = getValue(i,0);
       }
     }
+
+    if(option == 'short'){
+      continue;
+    }
+
 
     else if(market_name.indexOf('bcg_Total_') !== -1){
       if(market_name == 'bcg_Total_EO'){

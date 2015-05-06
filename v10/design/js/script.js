@@ -151,3 +151,9 @@ function playpause(){
 		update();
 	}
 }
+
+function fillOption(value){
+	pageScroll.pause();
+	document.getElementById('scroll').value = 0;
+	update();
+}

@@ -19,7 +19,7 @@ myApp.controller('matchesController', ['$scope', function($scope){
 			$scope.data = JSON.parse(document.getElementById('json').innerHTML);
 			for(var i = 0; i < $scope.data.events.length; i++){
 				$scope.legends.push({'id' : $scope.data.events[i].id});
-				$scope.data.events[i].markets = dataConvert($scope.data.events[i].id, $scope.data.events[i].markets);
+				$scope.data.events[i].markets = dataConvert($scope.data.events[i].id, $scope.data.events[i].markets, document.getElementById('fill-option').value);
 			}
 		}else{
 			document.getElementById('intro').style.display = "block";
