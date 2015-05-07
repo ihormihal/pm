@@ -297,7 +297,7 @@ function dataConvert (id, markets, option){
       }
     }
 
-    if(option == 'short'){
+    else if(option == 'short'){
       continue;
     }
 
