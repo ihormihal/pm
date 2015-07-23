@@ -10,7 +10,13 @@ myApp.directive('onLastRepeat', function() {
   };
 });
 
-myApp.controller('matchesController', ['$scope', function($scope){
+myApp.controller('matchesController', ['$scope','$http', function($scope,$http){
+
+	$http.get('translate/data/translate_'+document.documentElement.getAttribute('data-lang')+'.json',{})
+	.success(function(data, status, headers, config){
+		translate = data;
+		$scope.load();
+	});
 
 	$scope.legends = [];
 	$scope.load = function(){
@@ -26,7 +32,6 @@ myApp.controller('matchesController', ['$scope', function($scope){
 		}
 	};
 
-	$scope.load();
 
 	update = function(){
 		if(document.getElementById('scroll').value == 0){

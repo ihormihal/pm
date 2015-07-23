@@ -1,0 +1,37 @@
+body {background-color: #444; font-family: Arial;}
+.main {max-width: 960px; margin: 0 auto;}
+.translate-form {}
+.translate-form h2 {text-transform: uppercase; color: #fff;}
+.translate-form table {
+
+}
+.translate-form table thead {
+
+}
+.translate-form table th {
+	color: #aaa;
+}
+.translate-form table td {
+
+}
+.translate-form label {
+	color: #aaa;
+	display: inline-block;
+	min-width: 100px;
+}
+.translate-form input {
+	display: inline-block; border: none; padding: 10px; outline: none;
+	background-color: #eee;
+	min-width: 250px;
+}
+.translate-form input:focus {background-color: #fff;}
+.translate-form input.btn {
+	background-color: #F0A625;
+	color: #fff; text-transform: uppercase; font-size: 1.25rem;
+}
+.translate-form input.btn:hover {background-color: #F4882E;}
+.translate-form .save {position: fixed; right: 15px; top: 15px;}
+
+.translate-form .save .status {font-size: 0.8rem; margin-top: 15px;}
+.translate-form .save .status.success {color: #75FF57;}
+.translate-form .save .status.error {color: #FF7757;}

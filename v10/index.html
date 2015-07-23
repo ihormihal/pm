@@ -16,7 +16,6 @@
 <body ng-app="myApp" scroll>
   <input type="hidden" id="scroll" name="scroll" value="0"/>
   <div id="json" style="display:none;">
-    
   </div>
   <div id="overlay_loading"></div>
   <div id="intro">
@@ -317,7 +316,7 @@
               <!--Другие маркеты-->
               <div class="data-table" ng-repeat="table in match.markets.tables" ng-show="table.th.length">
                 <table class="block-table left-align">
-                  <caption>{{table.tableCode|translate:'markets':table.tableName}}</caption>
+                  <caption>{{table.tableCode|translate_others:table.tableName}}</caption>
                   <tbody>
                     <tr ng-repeat="th in table.th">
                       <td class="green-text">{{th.field|translate:'markets'}}</td>
@@ -330,7 +329,7 @@
               <!--Другие маркеты 2collum-->
               <div class="data-table" ng-repeat="multitable in match.markets.multiTables">
                 <table class="block-table th-color">
-                  <caption>{{multitable.tableCode|translate:'markets':multitable.tableName}}</caption>
+                  <caption>{{multitable.tableCode|translate_others:multitable.tableName}}</caption>
                   <tbody>
                     <tr ng-repeat="row in multitable.Rows">
                       <td ng-show="row.col1.show">{{row.col1.field|translate:'markets'}}</td>
