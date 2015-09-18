@@ -1,0 +1,400 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-lang="ru">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>PariMatch TEST</title>
+    <link href="design/css/style.css" rel="stylesheet">
+    <script src="js/angular.min.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/data-convert.js"></script>
+    <script src="js/app.js"></script>
+    <script src="design/js/script.js"></script>
+</head>
+
+
+<body ng-app="myApp" scroll>
+  <input type="hidden" id="scroll" name="scroll" value="0"/>
+  <div id="json" style="display:none;">
+  </div>
+  <div id="overlay_loading"></div>
+  <div id="intro">
+    <div class="line"><div class="text">Soon in Live</div></div>
+    <div class="line"><div class="text">Скоро в Лайв</div></div>
+    <div class="line"><div class="text">Soon in Live</div></div>
+    <div class="line"><div class="text">Скоро в Лайв</div></div>
+  </div>
+  <section id="content">
+    <div id="overlay"></div>
+    <div class="wrapper" ng-controller="matchesController">
+      <div id="events">
+        <!-- events start -->
+        <div ng-repeat="match in data.events" id="{{match.id}}" class="main-block skind_{{match.sportKind}}">
+          <div class="main-block-header">
+            <div class="top-line">
+              <div class="left title"><span class="sport-kind-icon"></span>{{match.razdName|truncate:50}}</div>
+              <div class="right code">{{match.id}}</div>
+              <div class="code_label">{{'game_code'|translate:'main'}}:</div>
+              <div class="clear"></div>
+            </div>
+            <div class="fixed" id="fixed-{{match.id}}">
+              <div class="top-line">
+                <div class="left title">{{match.team1}} <span class="score">{{match.score}}</span> {{match.team2}}</div>
+                <div class="right code">{{match.id}}</div>
+                <div class="clear"></div>
+              </div>
+            </div>
+            <div class="header-content">
+              <table class="table">
+                <tr>
+                  <td class="match-code">{{match.id}}</td>
+                  <td class="team">
+                    <h2 class="team1 serve serv{{match.stats.ServeTeam}}">{{match.team1}}</h2>
+                    <h2>-</h2>
+                    <h2 class="team2 serve serv{{match.stats.ServeTeam}}">{{match.team2}}</h2>
+                  </td>
+                  <td class="time-count">
+                    <span ng-show="match.mins" class="icoTimer {{icoTime(match.mins)}}">{{showTime(match.mins)}}</span>
+                    <div ng-show="match.status|translate:'status'"><span class="icoTimer icoAlert">{{match.status|translate:'status'}}</span></div>
+                    <div><span class="alertmsg">{{match.liveStatus|translate:'livestatus'}}</span></div>
+                    <div ng-show="match.note">{{match.note}}</div>
+                  </td>
+                  <td class="score mscore"><span>{{'score'|translate:'main'}}</span>{{getScore(match.score)}}</td>
+                  <td class="score pscore period1">{{getScore(match.score1)}}</td>
+                  <td class="score pscore period2">{{getScore(match.score2)}}</td>
+                  <td class="score pscore period3">{{getScore(match.score3)}}</td>
+                  <td class="score pscore period4">{{getScore(match.score4)}}</td>
+                  <td class="score pscore period5">{{getScore(match.score5)}}</td>
+                  <td class="score scoreg" ng-show="match.scoreg">{{match.scoreg}}</td>
+                </tr>
+              </table>
+            </div>
+            <ng-include src="loadHBar(match.sportKind)" ng-show="showHBar(match.mins,match.stats)"></ng-include>
+          </div>          
+          <!-- markets section-->
+          <div ng-show="1" class="main-block-body">
+            <div class="lock liveStatus_{{match.liveStatus}}"></div>
+            <table class="block-table large">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>{{'win'|translate:'main'}}1</th>
+                  <th ng-hide="hideX(match.sportKind)">Х</th>
+                  <th>{{'win'|translate:'main'}}2</th>
+                  <th ng-show="hideDC(match.sportKind)">1Х</th>
+                  <th ng-show="hideDC(match.sportKind)">12</th>
+                  <th ng-show="hideDC(match.sportKind)">Х2</th>
+                  <th>{{'odds'|translate:'main'}} 1</th>
+                  <th>{{'rate'|translate:'main'}}</th>
+                  <th>{{'odds'|translate:'main'}} 2</th>
+                  <th>{{'rate'|translate:'main'}}</th>
+                  <th>{{'total'|translate:'main'}}</th>
+                  <th>{{'more'|translate:'main'}}</th>
+                  <th>{{'less'|translate:'main'}}</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <tr>
+                  <td>{{'match'|translate:'main'}}</td>
+                  <td class="{{match.markets.table_data.bc_1.dir}}">
+                    <div class="arrow">{{match.markets.table_data.bc_1.value}}</div>
+                  </td>
+                  <td ng-hide="hideX(match.sportKind)" class="{{match.markets.table_data.bc_X.dir}}">{{match.markets.table_data.bc_X.value}}</td>
+                  <td class="{{match.markets.table_data.bc_2.dir}}">
+                    <div class="arrow">{{match.markets.table_data.bc_2.value}}</div>
+                  </td>
+                  <td class="{{match.markets.table_data.bc_1X.dir}}" ng-show="hideDC(match.sportKind)">
+                    <div class="arrow">{{match.markets.table_data.bc_1X.value}}</div>
+                  </td>
+                  <td class="{{match.markets.table_data.bc_12.dir}}" ng-show="hideDC(match.sportKind)">
+                    <div class="arrow">{{match.markets.table_data.bc_12.value}}</div>
+                  </td>
+                  <td class="{{match.markets.table_data.bc_X2.dir}}" ng-show="hideDC(match.sportKind)">
+                    <div class="arrow">{{match.markets.table_data.bc_X2.value}}</div>
+                  </td>
+                  <td class="green-text">{{match.markets.table_data.bc_f1.value}}</td>
+                  <td class="{{match.markets.table_data.bc_fk1.dir}}">
+                    <div class="arrow">{{match.markets.table_data.bc_fk1.value}}</div>
+                  </td>
+                  <td class="green-text">{{match.markets.table_data.bc_f2.value}}</td>
+                  <td class="{{match.markets.table_data.bc_fk2.dir}}">
+                    <div class="arrow">{{match.markets.table_data.bc_fk2.value}}</div>
+                  </td>
+                  <td class="green-text">{{match.markets.table_data.bc_T_V.value}}</td>
+                  <td class="{{match.markets.table_data.bc_T_G.dir}}">
+                    <div class="arrow">{{match.markets.table_data.bc_T_G.value}}</div>
+                  </td>
+                  <td class="{{match.markets.table_data.bc_T_L.dir}}">
+                    <div class="arrow">{{match.markets.table_data.bc_T_L.value}}</div>
+                  </td>
+                </tr>
+
+                <tr ng-repeat="time in match.markets.table_data_time track by $index" ng-show="time.tableName">
+                  <td>{{time.tableName}}{{match.sportKind|translate:'period_suffix'}}</td>
+                  <td class="{{time.bc_1.dir}}">
+                    <div class="arrow">{{time.bc_1.value}}</div>
+                  </td>
+                  <td ng-hide="hideX(match.sportKind)" class="{{time.bc_X.dir}}">
+                    <div class="arrow">{{time.bc_X.value}}</div>
+                  </td>
+                  <td class="{{time.bc_2.dir}}">
+                    <div class="arrow">{{time.bc_2.value}}</div>
+                  </td>
+                  <td class="{{time.bc_1X.dir}}" ng-show="hideDC(match.sportKind)">
+                    <div class="arrow">{{time.bc_1X.value}}</div>
+                  </td>
+                  <td class="{{time.bc_12.dir}}" ng-show="hideDC(match.sportKind)">
+                    <div class="arrow">{{time.bc_12.value}}</div>
+                  </td>
+                  <td class="{{time.bc_X2.dir}}" ng-show="hideDC(match.sportKind)">
+                    <div class="arrow">{{time.bc_X2.value}}</div>
+                  </td>
+                  <td class="green-text">{{time.bc_f1.value}}</td>
+                  <td class="{{time.bc_fk1.dir}}">
+                    <div class="arrow">{{time.bc_fk1.value}}</div>
+                  </td>
+                  <td class="green-text">{{time.bc_f2.value}}</td>
+                  <td class="{{time.bc_fk2.dir}}">
+                    <div class="arrow">{{time.bc_fk2.value}}</div>
+                  </td>
+                  <td class="green-text">{{time.bc_T_V.value}}</td>
+                  <td class="{{time.bc_T_G.dir}}">
+                    <div class="arrow">{{time.bc_T_G.value}}</div>
+                  </td>
+                  <td class="{{time.bc_T_L.dir}}">
+                    <div class="arrow">{{time.bc_T_L.value}}</div>
+                  </td>
+                  
+                </tr>
+
+              </tbody>
+            </table>
+
+            <div class="alltables four-coll">
+
+              <!--Фора-->
+              <div class="data-table" ng-show="match.markets.table_odds.th.length">
+                <table class="block-table">
+                  <caption>{{match.markets.table_odds.tableName|translate:'markets'}}</caption>
+                  <thead>
+                    <tr>
+                      <th>{{'odds'|translate:'main'}}</th>
+                      <th>1</th>
+                      <th>{{'odds'|translate:'main'}}</th>
+                      <th>2</th>
+                    </tr>
+                  </thead>
+                  <tbody class="semibold-col">
+                    <tr ng-repeat="th in match.markets.table_odds.th">
+                      <td>{{th.f1.value}}</td>
+                      <td class="{{th.fk1.dir}}"><div class="arrow">{{th.fk1.value}}</div></td>
+                      <td>{{th.f2.value}}</td>
+                      <td class="{{th.fk1.dir}}"><div class="arrow">{{th.fk2.value}}</div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!--Фора по таймам-->
+              <div class="data-table" ng-repeat="time in match.markets.table_odds_time" ng-show="time.th.length">
+                <table class="block-table {{time.lock}}">
+                <caption>Фора ({{tablename(time.tableName,match.sportKind)}})</caption>
+                  <thead>
+                    <tr>
+                       <th>{{'odds'|translate:'main'}}</th>
+                       <th>1</th>
+                       <th>{{'odds'|translate:'main'}}</th>
+                       <th>2</th>
+                    </tr>
+                 </thead>
+                 <tbody class="semibold-col">
+                    <tr ng-repeat="th in time.th">
+                       <td>{{th.f1.value}}</td>
+                       <td class="{{th.fk1.dir}}"><div class="arrow">{{th.fk1.value}}</div></td>
+                       <td>{{th.f2.value}}</td>
+                       <td class="{{th.fk2.dir}}"><div class="arrow">{{th.fk2.value}}</div></td>
+                    </tr>
+                 </tbody>  
+                </table>
+              </div>
+
+              <!--Тотал общий-->
+              <div class="data-table" ng-show="{{match.markets.table_total.th.length}}">
+                <table class="block-table">
+                <caption>{{match.markets.table_total.tableName|translate:'markets'}}</caption>
+                  <thead>
+                    <tr>
+                      <th>{{'t'|translate:'main'}}</th>
+                      <th>{{'m'|translate:'main'}}</th>
+                      <th>{{'l'|translate:'main'}}</th>
+                    </tr>
+                 </thead>
+                 <tbody class="semibold-first-col">
+                    <tr ng-repeat="th in match.markets.table_total.th">
+                      <td>{{th.rate.value}}</td>
+                      <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
+                      <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
+                    </tr>
+                 </tbody>  
+                </table>
+              </div>
+              
+              <!--Тотал индивидуальний-->
+              <div class="data-table two-tables" ng-show="match.markets.table_total_team1.th.length">
+                <table class="block-table half" ng-show="match.markets.table_total_team1.th.length">
+                <caption>{{match.markets.table_total_team1.tableName|translate:'markets'}}</caption>
+                  <thead>
+                    <tr>
+                      <th>{{'t'|translate:'main'}}</th>
+                      <th>{{'m'|translate:'main'}}</th>
+                      <th>{{'l'|translate:'main'}}</th>
+                    </tr>
+                 </thead>
+                 <tbody class="semibold-first-col">
+                    <tr ng-repeat="th in match.markets.table_total_team1.th">
+                      <td>{{th.rate.value}}</td>
+                      <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
+                      <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
+                    </tr>
+                 </tbody>
+                </table>
+
+                <table class="block-table half" ng-show="match.markets.table_total_team2.th.length">
+                <caption>{{match.markets.table_total_team2.tableName|translate:'markets'}}</caption>
+                  <thead>
+                    <tr>
+                      <th>{{'t'|translate:'main'}}</th>
+                      <th>{{'m'|translate:'main'}}</th>
+                      <th>{{'l'|translate:'main'}}</th>
+                    </tr>
+                 </thead>
+                 <tbody class="semibold-first-col">
+                    <tr ng-repeat="th in match.markets.table_total_team2.th">
+                      <td>{{th.rate.value}}</td>
+                      <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
+                      <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
+                    </tr>
+                 </tbody>  
+                </table>
+              </div>
+
+              <!--Тотал общий по таймам-->
+              <div class="data-table" ng-repeat="time in match.markets.table_total_time" ng-show="time.th.length">
+                <table class="block-table">
+                <caption>{{match.markets.table_total.tableName|translate:'markets'}} -{{match.sportKind|translate:'period_suffix'}}</caption>
+                  <thead>
+                    <tr>
+                      <th>{{'t'|translate:'main'}}</th>
+                      <th>{{'m'|translate:'main'}}</th>
+                      <th>{{'l'|translate:'main'}}</th>
+                    </tr>
+                 </thead>
+                 <tbody class="semibold-first-col">
+                    <tr ng-repeat="th in time.th">
+                      <td>{{th.rate.value}}</td>
+                      <td class="{{th.b.dir}}"><div class="arrow">{{th.b.value}}</div></td>
+                      <td class="{{th.m.dir}}"><div class="arrow">{{th.m.value}}</div></td>
+                    </tr>
+                 </tbody>  
+                </table>
+              </div>
+              
+              <!--Забьют обе?-->
+              <div class="data-table" ng-show="match.markets.table_goal.th.length">
+                <table class="block-table left-align">
+                  <caption>{{match.markets.table_goal.tableName|translate:'markets'}}</caption>
+                  <tbody>
+                    <tr ng-repeat="th in match.markets.table_goal.th">
+                      <td class="green-text">{{th.field|translate:'markets'}}</td>
+                      <td class="{{th.index.dir}}"><div class="arrow">{{th.index.value}}</div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!--Другие маркеты-->
+              <div class="data-table" ng-repeat="table in match.markets.tables" ng-show="table.th.length">
+                <table class="block-table left-align">
+                  <caption>{{table.tableCode|translate_others:table.tableName}}</caption>
+                  <tbody>
+                    <tr ng-repeat="th in table.th">
+                      <td class="green-text">{{th.field|translate:'markets'}}</td>
+                      <td class="{{th.index.dir}}"><div class="arrow">{{th.index.value}}</div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!--Другие маркеты 2collum-->
+              <div class="data-table" ng-repeat="multitable in match.markets.multiTables">
+                <table class="block-table th-color">
+                  <caption>{{multitable.tableCode|translate_others:multitable.tableName}}</caption>
+                  <tbody>
+                    <tr ng-repeat="row in multitable.Rows">
+                      <td ng-show="row.col1.show">{{row.col1.field|translate:'markets'}}</td>
+                      <td ng-show="row.col1.show" class="{{row.col1.index.dir}}"><div class="arrow">{{row.col1.index.value}}</div></td>
+
+                      <td ng-show="row.col2.show">{{row.col2.field|translate:'markets'}}</td>
+                      <td ng-show="row.col2.show" class="{{row.col2.index.dir}}"><div class="arrow">{{row.col2.index.value}}</div></td>
+
+                      <td ng-show="row.col3.show">{{row.col3.field|translate:'markets'}}</td>
+                      <td ng-show="row.col3.show" class="{{row.col3.index.dir}}"><div class="arrow">{{row.col3.index.value}}</div></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+          </div>
+          <!-- markets section end -->
+
+        </div>
+        <!-- events end-->
+      </div>
+
+      <div class="legend"><div id="legend"></div></div>
+      <div class="panel-control">
+
+        <div class="item-control scroll-control">
+          <div id="playpause" class="play" onclick="playpause()"></div>
+        </div>
+        <div class="item-control">
+          <label for="scroll-step">Шаг скролла</label>
+          <select id="scroll-step" onchange="newScrollParam()">
+            <option value="1" selected>1 px</option>
+            <option value="2">2 px</option>
+            <option value="3">3 px</option>
+            <option value="4">4 px</option>
+            <option value="5">5 px</option>
+            <option value="10">10 px</option>
+          </select>
+        </div>
+        <div class="item-control">
+          <label for="scroll-interval">Интервал скролла</label>
+          <select id="scroll-interval" onchange="newScrollParam()">
+            <option value="3">5 ms</option>
+            <option value="5">5 ms</option>
+            <option value="7">7 ms</option>
+            <option value="10">10 ms</option>
+            <option value="20">20 ms</option>
+            <option value="30">30 ms</option>
+            <option value="40" selected>40 ms</option>
+            <option value="50">50 ms</option>
+            <option value="100">100 ms</option>
+          </select>
+        </div>
+        <div class="item-control">
+          <label for="fill-option">Роспись:</label>
+          <select id="fill-option" onchange="fillOption()">
+            <option value="full" selected>Полная</option>
+            <option value="short">Краткая</option>
+          </select>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+</body>
+</html>

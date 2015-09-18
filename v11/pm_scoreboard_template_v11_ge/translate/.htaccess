@@ -1,0 +1,5 @@
+AddType application/octet-stream csv
+AuthName "ScoreBoard Template Admin"
+AuthType Basic
+AuthUserFile Z:/home/localhost/www/pm/v11/translate/.passwd
+require valid-user
